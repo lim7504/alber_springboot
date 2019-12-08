@@ -29,3 +29,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### DB Connect Info###
+/src/main/resources/db.yml
