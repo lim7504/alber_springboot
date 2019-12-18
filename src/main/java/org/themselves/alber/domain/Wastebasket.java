@@ -1,5 +1,6 @@
 package org.themselves.alber.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,6 +26,7 @@ public class Wastebasket extends BaseEntity{
 
     private Boolean userRegisterYn;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")
     private List<UserPin> userPinList = new ArrayList<>();
 

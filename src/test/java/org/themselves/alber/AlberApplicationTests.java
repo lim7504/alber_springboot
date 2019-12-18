@@ -13,6 +13,9 @@ import org.themselves.alber.domain.User;
 import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.service.UserService;
 
+import javax.persistence.EntityManager;
+import java.util.Optional;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.config.location=classpath:/application.yml,classpath:/db.yml")
 @Transactional
@@ -25,17 +28,20 @@ class AlberApplicationTests {
 	@Autowired
 	UserService userService;
 
+	@Autowired
+	EntityManager em;
+
+
 	@Test
-	void testUser() {
+	void testUser() throws InterruptedException {
 
 		User user = new User();
 		user.setNickname("둘리");
 		user.setEmail("abcd@abcd");
 		user.setPassword("1234");
-		userService.saveUser(user);
+		userService.JoinUser(user);
 
-		User findUser = userRepository.findOne(user.getId());
-		Assert.assertThat(findUser.getId(), CoreMatchers.is(user.getId()));
+
 
 	}
 

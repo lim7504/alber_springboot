@@ -1,5 +1,6 @@
 package org.themselves.alber.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -30,4 +31,6 @@ public class BaseEntity {
 
     @LastModifiedBy
     private String lastModifiedBy;
+
+
 }
