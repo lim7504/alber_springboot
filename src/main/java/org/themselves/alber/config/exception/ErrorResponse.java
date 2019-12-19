@@ -1,9 +1,8 @@
-package org.themselves.alber.config;
+package org.themselves.alber.config.exception;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.FieldError;
 
 import java.util.List;
 

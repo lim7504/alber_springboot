@@ -1,4 +1,4 @@
-package org.themselves.alber.config;
+package org.themselves.alber.config.exception;
 
 import lombok.Getter;
 

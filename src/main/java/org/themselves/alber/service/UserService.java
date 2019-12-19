@@ -3,6 +3,8 @@ package org.themselves.alber.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.themselves.alber.config.exception.CustomException;
+import org.themselves.alber.config.exception.ErrorCode;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.UserStatus;
 import org.themselves.alber.repository.UserRepository;
@@ -19,18 +21,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Boolean JoinUser(User user){
+    public Boolean JoinUser(User user) throws CustomException{
 
-        try {
-            user.setJoinedDate(LocalDateTime.now());
-            user.setLastLoginDate(LocalDateTime.now());
-            user.setStatus(UserStatus.ACTIVE);
-            userRepository.save(user);
+        user.setJoinedDate(LocalDateTime.now());
+        user.setLastLoginDate(LocalDateTime.now());
+        user.setStatus(UserStatus.ACTIVE);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        if(userRepository.findByEmail(user.getEmail()).isPresent())
+            throw new CustomException(ErrorCode.EMAIL_DUPLICATION);
+
+        userRepository.save(user);
 
         return true;
     }
