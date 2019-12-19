@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody @Valid UserJoinNUpdateDto userUpdateDto) {
+    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserJoinNUpdateDto userUpdateDto) {
 
         User user = new User();
         user.setId(id);
@@ -60,5 +60,13 @@ public class UserController {
         return userService.deleteUser(id);
     }
 
+    @GetMapping("/login")
+    private Boolean login(@RequestBody UserJoinNUpdateDto userUpdateDto ) {
+        User user = new User();
+        user.setEmail(userUpdateDto.getEmail());
+        user.setPassword(userUpdateDto.getPassword());
 
+        return true;
+
+    }
 }

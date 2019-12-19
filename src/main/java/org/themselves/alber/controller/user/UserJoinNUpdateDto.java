@@ -4,10 +4,14 @@ import lombok.Data;
 import lombok.Setter;
 import org.themselves.alber.domain.UserStatus;
 
+import javax.validation.constraints.Email;
+
 @Data
 public class UserJoinNUpdateDto {
 
     private String nickname;
+
+    @Email
     private String email;
     private String password;
 
