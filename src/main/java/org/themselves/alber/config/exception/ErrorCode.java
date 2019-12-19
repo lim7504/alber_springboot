@@ -9,7 +9,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_FOUND("AC_001", "해당 회원을 찾을 수 없습니다.", 404),
     EMAIL_DUPLICATION("AC_002", "이메일이 중복되었습니다.", 400),
     NICKNAME_DUPLICATION("AC_003", "닉네임이 중복되었습니다.", 400),
-    PASSWORD_PASSWORD_ALONG("AC_004", "비밀번호와 비밀번호 확인이 같지 않습니다.", 400),
+    PASSWORD_PASSWORDCHECK_ALONG("AC_004", "비밀번호와 비밀번호 확인이 같지 않습니다.", 400),
     PASSWORD_ALONG("AC_004", "비밀번호가 맞지 않습니다..", 400),
 
     //Common Message

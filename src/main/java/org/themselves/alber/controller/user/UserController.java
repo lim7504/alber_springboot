@@ -21,7 +21,7 @@ public class UserController {
     public Boolean joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
 
         if (!userJoinDto.getPassword().equals(userJoinDto.getPasswordCheck()))
-            throw new CustomException(ErrorCode.PASSWORD_PASSWORD_ALONG);
+            throw new CustomException(ErrorCode.PASSWORD_PASSWORDCHECK_ALONG);
 
         User user = new User();
         user.setNickname(userJoinDto.getNickname());
