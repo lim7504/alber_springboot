@@ -2,6 +2,8 @@ package org.themselves.alber.controller.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.themselves.alber.config.exception.CustomException;
+import org.themselves.alber.config.exception.ErrorCode;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.service.UserService;
 
@@ -16,7 +18,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user/new")
-    public Boolean joinUser(@RequestBody @Valid UserJoinNUpdateDto userJoinDto) {
+    public Boolean joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
+
+        if (!userJoinDto.getPassword().equals(userJoinDto.getPasswordCheck()))
+            throw new CustomException(ErrorCode.PASSWORD_PASSWORD_ALONG);
 
         User user = new User();
         user.setNickname(userJoinDto.getNickname());
@@ -28,6 +33,7 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public UserDto getUserOne(@PathVariable("id") Long id) {
+
         User user = userService.getUserOne(id).get();
         return new UserDto(user.getId(), user.getNickname(), user.getEmail(), user.getStatus(), user.getLastLoginDate(), user.getJoinedDate());
     }
@@ -43,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserJoinNUpdateDto userUpdateDto) {
+    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
 
         User user = new User();
         user.setId(id);
@@ -57,14 +63,27 @@ public class UserController {
 
     @DeleteMapping("/user/{id}")
     public Boolean deleteUser(@PathVariable("id") Long id) {
+
         return userService.deleteUser(id);
     }
 
     @GetMapping("/login")
-    private Boolean login(@RequestBody UserJoinNUpdateDto userUpdateDto ) {
+    private Boolean login(@RequestBody UserLoginDto userLoginDto ) {
+
         User user = new User();
-        user.setEmail(userUpdateDto.getEmail());
-        user.setPassword(userUpdateDto.getPassword());
+        user.setEmail(userLoginDto.getEmail());
+        user.setPassword(userLoginDto.getPassword());
+
+        userService.login(user);
+
+        return true;
+
+    }
+
+    @GetMapping("/logout")
+    private Boolean logout() {
+
+        userService.logout();
 
         return true;
 

@@ -28,12 +28,12 @@ public class SwaggerConfig {
     @SuppressWarnings("deprecation")
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
-                "REST API2222",
-                "API 리스트",
+                "ALBER REST API",
+                "",
                 "API V1.0",
                 "Terms of service",
                 "alber.themselves@gmail.com",
-                "License of API",
+                "License of Alber",
                 "/");
         return apiInfo;
     }

@@ -5,19 +5,27 @@ import lombok.Setter;
 import org.themselves.alber.domain.UserStatus;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Data
-public class UserJoinNUpdateDto {
+public class UserJoinDto {
 
+    @NotEmpty
     private String nickname;
 
-    @Email
+    @Email @NotEmpty
     private String email;
+
+    @NotEmpty
     private String password;
 
-    public UserJoinNUpdateDto(String nickname, String email, String password) {
+    @NotEmpty
+    private String passwordCheck;
+
+    public UserJoinDto(String nickname, String email, String password, String passwordCheck) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
+        this.passwordCheck = passwordCheck;
     }
 }
