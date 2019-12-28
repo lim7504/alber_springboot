@@ -16,12 +16,4 @@ public class UserDto {
     private LocalDateTime lastLoginDate;
     private LocalDateTime joinedDate;;
 
-    public UserDto(Long id, String nickname, String email, UserStatus status, LocalDateTime lastLoginDate, LocalDateTime joinedDate) {
-        this.id = id;
-        this.nickname = nickname;
-        this.email = email;
-        this.status = status;
-        this.lastLoginDate = lastLoginDate;
-        this.joinedDate = joinedDate;
-    }
 }

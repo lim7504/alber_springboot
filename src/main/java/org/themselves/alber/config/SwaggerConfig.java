@@ -1,5 +1,6 @@
 package org.themselves.alber.config;
 
+import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
@@ -20,6 +21,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.any())
 //                .paths(PathSelectors.ant("/*"))
                 .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
                 .build()
                 .apiInfo(apiInfo());
     }
@@ -31,10 +33,10 @@ public class SwaggerConfig {
                 "ALBER REST API",
                 "",
                 "API V1.0",
-                "Terms of service",
+                "",
                 "alber.themselves@gmail.com",
-                "License of Alber",
-                "/");
+                "",
+                "");
         return apiInfo;
     }
 }

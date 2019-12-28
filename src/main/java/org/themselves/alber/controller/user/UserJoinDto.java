@@ -22,10 +22,11 @@ public class UserJoinDto {
     @NotEmpty
     private String passwordCheck;
 
-    public UserJoinDto(String nickname, String email, String password, String passwordCheck) {
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-        this.passwordCheck = passwordCheck;
+    Boolean checkPassword() {
+
+        if (!password.equals(passwordCheck))
+            return false;
+
+        return true;
     }
 }

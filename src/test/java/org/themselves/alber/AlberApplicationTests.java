@@ -33,7 +33,7 @@ class AlberApplicationTests {
 
 
 	@Test
-	void testUser() throws InterruptedException {
+	void testUser() throws Exception {
 
 		User user = new User();
 		user.setNickname("둘리");

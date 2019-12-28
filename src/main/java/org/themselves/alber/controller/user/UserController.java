@@ -1,9 +1,18 @@
 package org.themselves.alber.controller.user;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.themselves.alber.config.exception.CustomException;
-import org.themselves.alber.config.exception.ErrorCode;
+import org.themselves.alber.config.response.CustomException;
+import org.themselves.alber.config.response.ResponseContent;
+import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.service.UserService;
 
@@ -13,79 +22,86 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
+@Api(description = "회원")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/user/new")
-    public Boolean joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
+    private final ModelMapper modelMapper;
 
-        if (!userJoinDto.getPassword().equals(userJoinDto.getPasswordCheck()))
-            throw new CustomException(ErrorCode.PASSWORD_PASSWORDCHECK_ALONG);
+    private final HttpHeaders responseHeaders;
 
-        User user = new User();
-        user.setNickname(userJoinDto.getNickname());
-        user.setEmail(userJoinDto.getEmail());
-        user.setPassword(userJoinDto.getPassword());
+    @PostMapping(consumes="application/json", produces = "application/json")
+    @ApiOperation(value = "회원가입")
+    public ResponseEntity<ResponseContent> joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
 
-        return userService.JoinUser(user);
+        if (!userJoinDto.checkPassword())
+        throw new CustomException(StatusCode.PASSWORD_PASSWORDCHECK_ALONG);
+
+        User user = modelMapper.map(userJoinDto, User.class);
+        userService.JoinUser(user);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .headers(responseHeaders)
+                .body(new ResponseContent(StatusCode.SUCCESS_CREATED));
     }
 
-    @GetMapping("/user/{id}")
-    public UserDto getUserOne(@PathVariable("id") Long id) {
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @ApiOperation(value = "회원상세조회")
+    public ResponseEntity<ResponseContent<UserDto>> getUserOne(@PathVariable("id") Long id) {
 
-        User user = userService.getUserOne(id).get();
-        return new UserDto(user.getId(), user.getNickname(), user.getEmail(), user.getStatus(), user.getLastLoginDate(), user.getJoinedDate());
+        User user = userService.getUserOne(id);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+
+        return ResponseEntity
+                .ok()
+                .headers(responseHeaders)
+                .body(new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @GetMapping("/userlist")
-    public List<UserDto> getUserAll() {
+    @GetMapping(produces = "application/json")
+    @ApiOperation(value = "회원리스트조회")
+    public ResponseEntity<ResponseContent<List<UserDto>>> getUserAll() {
 
         List<UserDto> userDtoList = new ArrayList<>();
         for (User user : userService.getUserAll())
-            userDtoList.add(new UserDto(user.getId(), user.getNickname(), user.getEmail(), user.getStatus(), user.getLastLoginDate(), user.getJoinedDate()));
+            userDtoList.add(modelMapper.map(user, UserDto.class));
 
-        return userDtoList;
+        return ResponseEntity
+                .ok()
+                .headers(responseHeaders)
+                .body( new ResponseContent<>(StatusCode.SUCCESS, userDtoList));
     }
 
-    @PutMapping("/user/{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
+    @PutMapping(value = "/{id}", consumes="application/json", produces = "application/json")
+    @ApiOperation(value = "회원수정")
+    public ResponseEntity<ResponseContent<UserDto>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
 
-        User user = new User();
+        User user = modelMapper.map(userUpdateDto, User.class);
         user.setId(id);
-        user.setNickname(userUpdateDto.getNickname());
-        user.setEmail(userUpdateDto.getEmail());
-        user.setPassword(userUpdateDto.getPassword());
 
-        User responseUser = userService.updateUser(user);
-        return new UserDto(responseUser.getId(), responseUser.getNickname(), responseUser.getEmail(), responseUser.getStatus(), responseUser.getLastLoginDate(), responseUser.getJoinedDate());
+        User updateUser = userService.updateUser(user);
+
+        UserDto userDto = modelMapper.map(updateUser, UserDto.class);
+        return ResponseEntity
+                .ok()
+                .headers(responseHeaders)
+                .body( new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @DeleteMapping("/user/{id}")
-    public Boolean deleteUser(@PathVariable("id") Long id) {
+    @DeleteMapping(value = "/{id}", produces = "application/json")
+    @ApiOperation(value = "회원삭제")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
 
-        return userService.deleteUser(id);
+        userService.deleteUser(id);
+
+        return ResponseEntity
+                .ok()
+                .headers(responseHeaders)
+                .body(new ResponseContent(StatusCode.SUCCESS));
     }
 
-    @GetMapping("/login")
-    private Boolean login(@RequestBody UserLoginDto userLoginDto ) {
 
-        User user = new User();
-        user.setEmail(userLoginDto.getEmail());
-        user.setPassword(userLoginDto.getPassword());
-
-        userService.login(user);
-
-        return true;
-
-    }
-
-    @GetMapping("/logout")
-    private Boolean logout() {
-
-        userService.logout();
-
-        return true;
-
-    }
 }

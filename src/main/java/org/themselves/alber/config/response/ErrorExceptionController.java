@@ -1,4 +1,4 @@
-package org.themselves.alber.config.exception;
+package org.themselves.alber.config.response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,38 +20,39 @@ public class ErrorExceptionController {
     private static final Logger log = LoggerFactory.getLogger(ErrorExceptionController.class);
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    protected ErrorResponse defaultException(Exception e) {
+    protected ResponseContent defaultException(Exception e) {
 
         log.error(e.getMessage());
-        return new ErrorResponse(e.getMessage());
+        return new ResponseContent(e.getMessage());
     }
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    protected ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    protected ResponseContent handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
         log.error(e.getMessage());
         final BindingResult bindingResult = e.getBindingResult();
 
-        List<ErrorResponse.FieldError> list = new ArrayList<>();
+        List<ResponseContent.FieldError> list = new ArrayList<>();
         for (FieldError error : bindingResult.getFieldErrors()) {
-            list.add(new ErrorResponse.FieldError(error));
+            list.add(new ResponseContent.FieldError(error));
         }
 
-        return new ErrorResponse(ErrorCode.INPUT_VALUE_INVALID, list);
+        return new ResponseContent(StatusCode.INPUT_VALUE_INVALID, list);
     }
 
     @ExceptionHandler(CustomException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    protected ErrorResponse handleMethodCustomException(CustomException e) {
+    protected ResponseContent handleMethodCustom400Exception(CustomException e) {
 
         log.error(e.getMessage());
-        return new ErrorResponse(e.getErrorCode());
+        return new ResponseContent(e.getStatusCode());
     }
+
 
 }
