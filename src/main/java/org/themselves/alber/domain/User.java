@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,6 +29,9 @@ public class User extends BaseEntity {
     private String password;
 
     @Enumerated(EnumType.STRING)
+    private UserType type;
+
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     private LocalDateTime lastLoginDate;
@@ -41,4 +45,8 @@ public class User extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<UserPin> userPinList = new ArrayList<>();
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
 }
