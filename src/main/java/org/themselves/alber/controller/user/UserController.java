@@ -29,7 +29,7 @@ public class UserController {
     private final UserService userService;
     private final ModelMapper modelMapper;
 
-    @PostMapping(consumes="application/json", produces = "application/json")
+    @PostMapping(consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "회원가입")
     public ResponseEntity<ResponseContent> joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
 
@@ -39,30 +39,24 @@ public class UserController {
         User user = modelMapper.map(userJoinDto, User.class);
         userService.JoinUser(user);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .headers(responseHeaders)
                 .body(new ResponseContent(StatusCode.SUCCESS_CREATED));
     }
 
-    @GetMapping(value = "/{id}", produces = "application/json", headers = "X-AUTH-TOKEN")
+    @GetMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원상세조회")
     public ResponseEntity<ResponseContent<UserDto>> getUserOne(@PathVariable("id") Long id) {
 
         User user = userService.getUserOne(id);
         UserDto userDto = modelMapper.map(user, UserDto.class);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .ok()
-                .headers(responseHeaders)
                 .body(new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @GetMapping(produces = "application/json", headers = "X-AUTH-TOKEN")
+    @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원리스트조회")
     public ResponseEntity<ResponseContent<List<UserDto>>> getUserAll() {
 
@@ -70,15 +64,12 @@ public class UserController {
         for (User user : userService.getUserAll())
             userDtoList.add(modelMapper.map(user, UserDto.class));
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .ok()
-                .headers(responseHeaders)
                 .body( new ResponseContent<>(StatusCode.SUCCESS, userDtoList));
     }
 
-    @PutMapping(value = "/{id}", consumes="application/json", produces = "application/json", headers = "X-AUTH-TOKEN")
+    @PutMapping(value = "/{id}", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원수정")
     public ResponseEntity<ResponseContent<UserDto>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
 
@@ -88,25 +79,19 @@ public class UserController {
         User updateUser = userService.updateUser(user);
 
         UserDto userDto = modelMapper.map(updateUser, UserDto.class);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .ok()
-                .headers(responseHeaders)
                 .body( new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @DeleteMapping(value = "/{id}", produces = "application/json", headers = "X-AUTH-TOKEN")
+    @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원삭제")
     public ResponseEntity deleteUser(@PathVariable("id") Long id) {
 
         userService.deleteUser(id);
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .ok()
-                .headers(responseHeaders)
                 .body(new ResponseContent(StatusCode.SUCCESS));
     }
 

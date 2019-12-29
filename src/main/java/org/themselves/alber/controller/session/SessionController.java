@@ -4,13 +4,10 @@ import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import netscape.security.Principal;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.JwtTokenProvider;
 import org.themselves.alber.config.response.ResponseContent;
@@ -31,7 +28,7 @@ public class SessionController {
     private final ModelMapper modelMapper;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping(consumes="application/json", produces = "application/json")
+    @PostMapping(consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "로그인")
     private ResponseEntity login(@RequestBody UserLoginDto userLoginDto , HttpServletResponse response) {
 
@@ -47,7 +44,6 @@ public class SessionController {
         //클라이언트에서 쿠키저장하고 API호출 할떄마다 헤더에 토큰 추가
 
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         responseHeaders.add("X-AUTH-TOKEN",token);
         return ResponseEntity
                 .ok()
@@ -55,7 +51,7 @@ public class SessionController {
                 .body(new ResponseContent(StatusCode.SUCCESS_LOGIN));
     }
 
-    @DeleteMapping(produces = "application/json", headers = "X-AUTH-TOKEN")
+    @DeleteMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "로그아웃")
     private ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -66,11 +62,8 @@ public class SessionController {
 //        response.addCookie(cookie);
         //클라이언트에서 쿠키삭제
 
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.add("Content-Type", "application/json; charset=UTF-8");
         return ResponseEntity
                 .ok()
-                .headers(responseHeaders)
                 .body(new ResponseContent(StatusCode.SUCCESS));
     }
 
