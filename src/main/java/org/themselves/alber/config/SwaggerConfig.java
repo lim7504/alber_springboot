@@ -30,7 +30,7 @@ public class SwaggerConfig {
     @SuppressWarnings("deprecation")
     private ApiInfo apiInfo() {
         ApiInfo apiInfo = new ApiInfo(
-                "ALBER REST API",
+                "ALBER REST API - test",
                 "",
                 "API V1.0",
                 "",
