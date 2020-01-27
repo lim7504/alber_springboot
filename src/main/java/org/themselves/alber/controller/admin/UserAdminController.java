@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/users")
 @Api(description = "회원_어드민")
 public class UserAdminController {
 
