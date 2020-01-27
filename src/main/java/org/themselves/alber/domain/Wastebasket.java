@@ -17,6 +17,18 @@ public class Wastebasket extends BaseEntity {
     @Column(name = "box_id")
     private Long id;
 
+    private String boxName;
+
+    private String areaSi;
+
+    private String areaGu;
+
+    private String areaDong;
+
+    private String latitude;
+
+    private String longitude;
+
     private String address;
 
     private String garType;
@@ -31,4 +43,7 @@ public class Wastebasket extends BaseEntity {
     @OneToMany(mappedBy = "wastebasket")
     private List<UserPin> userPinList = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "wastebasket")
+    private List<Image> imageList = new ArrayList<>();
 }
