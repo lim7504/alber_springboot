@@ -1,0 +1,7 @@
+---
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://alber.cbqx7yzzp0gc.ap-northeast-2.rds.amazonaws.com:3306/alber?characterEncoding=euc_kr
+    username: admin
+    password: adminab12

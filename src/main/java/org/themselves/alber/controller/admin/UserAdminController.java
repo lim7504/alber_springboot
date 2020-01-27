@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.user;
+package org.themselves.alber.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.user.UserDtoByAdmin;
+import org.themselves.alber.controller.user.UserJoinDto;
+import org.themselves.alber.controller.user.UserUpdateDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.service.UserService;
 
@@ -20,9 +23,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
-@Api(description = "회원")
-public class UserController {
+@RequestMapping("/admin")
+@Api(description = "회원_어드민")
+public class UserAdminController {
 
     private final UserService userService;
     private final ModelMapper modelMapper;
@@ -42,42 +45,55 @@ public class UserController {
                 .body(new ResponseContent(StatusCode.SUCCESS_CREATED));
     }
 
-    @GetMapping(value = "/detail", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @GetMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원상세조회")
-    public ResponseEntity<ResponseContent<UserDto>> getUserOne(Principal principal) {
+    public ResponseEntity<ResponseContent<UserDtoByAdmin>> getUserOne(@PathVariable("id") Long id) {
 
-        User user = userService.getUserByEmail(principal.getName());
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+        User user = userService.getUserOne(id);
+        UserDtoByAdmin userDto = modelMapper.map(user, UserDtoByAdmin.class);
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @PutMapping(value = "/detail", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "회원리스트조회")
+    public ResponseEntity<ResponseContent<List<UserDtoByAdmin>>> getUserAll() {
+
+        List<UserDtoByAdmin> userDtoList = new ArrayList<>();
+        for (User user : userService.getUserAll())
+            userDtoList.add(modelMapper.map(user, UserDtoByAdmin.class));
+
+        return ResponseEntity
+                .ok()
+                .body( new ResponseContent<>(StatusCode.SUCCESS, userDtoList));
+    }
+
+    @PutMapping(value = "/{id}", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원수정")
-    public ResponseEntity<ResponseContent<UserDto>> updateUser(@RequestBody UserUpdateDto userUpdateDto, Principal principal) {
+    public ResponseEntity<ResponseContent<UserDtoByAdmin>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
 
         User user = modelMapper.map(userUpdateDto, User.class);
-        user.setEmail(principal.getName());
+        user.setId(id);
 
         User updateUser = userService.updateUser(user);
 
-        UserDto userDto = modelMapper.map(updateUser, UserDto.class);
+        UserDtoByAdmin userDto = modelMapper.map(updateUser, UserDtoByAdmin.class);
         return ResponseEntity
                 .ok()
                 .body( new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
-    @DeleteMapping(value = "/detail", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
-    @ApiOperation(value = "회원탈퇴")
-    public ResponseEntity<ResponseContent<UserDto>> deleteUser(Principal principal) {
+    @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "회원삭제")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
 
-        userService.exitUser(principal.getName());
+        userService.deleteUser(id);
 
         return ResponseEntity
                 .ok()
-                .body( new ResponseContent<>(StatusCode.SUCCESS));
+                .body(new ResponseContent(StatusCode.SUCCESS));
     }
 
 }

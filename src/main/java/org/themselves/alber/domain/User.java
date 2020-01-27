@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.themselves.alber.domain.common.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -32,13 +33,14 @@ public class User extends BaseEntity {
     private UserType type;
 
     @Enumerated(EnumType.STRING)
+    private UserSocialType socialType;
+
+    @Enumerated(EnumType.STRING)
     private UserStatus status;
 
     private LocalDateTime lastLoginDate;
 
     private String majorAddress;
-
-    private LocalDateTime joinedDate;
 
     private LocalDateTime exitedDate;
 

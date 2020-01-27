@@ -1,4 +1,4 @@
-package org.themselves.alber.domain;
+package org.themselves.alber.domain.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -16,21 +16,14 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
 @Getter
-public class BaseEntity {
+public class BaseCreatedEntity {
 
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdDate;
 
-    @LastModifiedDate
-    private LocalDateTime lastModifiedDate;
-
     @CreatedBy
     @Column(updatable = false)
     private String createdBy;
-
-    @LastModifiedBy
-    private String lastModifiedBy;
-
 
 }

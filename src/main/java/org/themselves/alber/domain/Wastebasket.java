@@ -3,6 +3,7 @@ package org.themselves.alber.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.themselves.alber.domain.common.BaseEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
-public class Wastebasket extends BaseEntity{
+public class Wastebasket extends BaseEntity {
 
     @Id @GeneratedValue
     @Column(name = "box_id")

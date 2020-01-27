@@ -1,0 +1,28 @@
+
+spring:
+  main:
+    web-application-type: servlet
+    banner-mode: off
+  thymeleaf:
+    cache: false
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: create
+      use-new-id-generator-mappings: true
+    generate-ddl: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    properties:
+      hibernate:
+        format_sql: true
+  jwt:
+    secret: gkgk;
+
+
+logging:
+  level:
+    org:
+      hibernate: info
+      springframework:
+        web: debug

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.domain.UserSocialType;
 import org.themselves.alber.domain.UserStatus;
 import org.themselves.alber.domain.UserType;
 import org.themselves.alber.repository.UserRepository;
@@ -36,7 +37,7 @@ public class UserService {
             if (userRepository.findByNickname(user.getNickname()).isPresent())
                 throw new CustomException(StatusCode.NICKNAME_DUPLICATION);
 
-            user.setJoinedDate(LocalDateTime.now());
+            user.setSocialType(UserSocialType.None);
             user.setLastLoginDate(LocalDateTime.now());
             user.setStatus(UserStatus.ACTIVE);
             user.setType(UserType.USER);
@@ -58,10 +59,19 @@ public class UserService {
         return user.get();
     }
 
+    public User getUserByEmail(String email) {
+
+        Optional<User> user = userRepository.findByEmail(email);
+        if (!user.isPresent())
+            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+
+        return user.get();
+    }
+
     @Transactional
     public User updateUser(User user) {
 
-        Optional<User> updateUser = userRepository.findById(user.getId());
+        Optional<User> updateUser = userRepository.findByEmail(user.getEmail());
         if (!updateUser.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
@@ -82,5 +92,17 @@ public class UserService {
             throw new CustomException(StatusCode.DELETE_FAIL);
     }
 
+    @Transactional
+    public User exitUser(String email) {
+
+        Optional<User> updateUser = userRepository.findByEmail(email);
+        if (!updateUser.isPresent())
+            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+
+        updateUser.get().setStatus(UserStatus.INACTIVE);
+        updateUser.get().setExitedDate(LocalDateTime.now());
+
+        return updateUser.get();
+    }
 
 }

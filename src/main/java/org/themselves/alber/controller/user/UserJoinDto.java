@@ -22,7 +22,7 @@ public class UserJoinDto {
     @NotEmpty
     private String passwordCheck;
 
-    Boolean checkPassword() {
+    public Boolean checkPassword() {
 
         if (!password.equals(passwordCheck))
             return false;
