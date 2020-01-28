@@ -31,7 +31,8 @@ public class Wastebasket extends BaseEntity {
 
     private String address;
 
-    private String garType;
+    @Enumerated(EnumType.STRING)
+    private GarType garType;
 
     private String agency;
 

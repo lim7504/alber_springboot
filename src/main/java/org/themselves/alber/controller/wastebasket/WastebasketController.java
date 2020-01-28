@@ -1,17 +1,52 @@
 package org.themselves.alber.controller.wastebasket;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.themselves.alber.config.response.ResponseContent;
+import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.domain.Image;
+import org.themselves.alber.domain.User;
+import org.themselves.alber.domain.Wastebasket;
+import org.themselves.alber.service.UserService;
+import org.themselves.alber.service.WasteBasketService;
+
+import java.security.Principal;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/wastebasket")
 public class WastebasketController {
 
+    private final ModelMapper modelMapper;
+
+    private final WasteBasketService wasteBasketService;
+
+    private final UserService userService;
     /**
      * 쓰레기통 등록
      * 쓰레기통과 이미지정보를 함께 등록
      * pin도 함께 등록
      */
+    @PostMapping(consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "쓰레기통 등록")
+    public ResponseEntity<ResponseContent> addWestebasket(@RequestBody WastebasketDtoByAdd wastebasketDtoByAdd, Principal principal) {
+
+        User user = userService.getUserByEmail(principal.getName());
+
+        //이미지 받아오기
+        Image[] images = new Image[3];
+
+        Wastebasket wastebasket = modelMapper.map(wastebasketDtoByAdd, Wastebasket.class);
+        wasteBasketService.addWastebasket(wastebasket, user, images);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ResponseContent(StatusCode.SUCCESS_CREATED));
+    }
 
     /**
      * 쓰레기통 보기(상세)
