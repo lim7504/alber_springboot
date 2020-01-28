@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.domain.Image;
@@ -33,15 +34,14 @@ public class WastebasketController {
      */
     @PostMapping(consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 등록")
-    public ResponseEntity<ResponseContent> addWestebasket(@RequestBody WastebasketDtoByAdd wastebasketDtoByAdd, Principal principal) {
-
-        User user = userService.getUserByEmail(principal.getName());
-
-        //이미지 받아오기
-        Image[] images = new Image[3];
+    public ResponseEntity<ResponseContent> addWestebasket(@RequestBody WastebasketDtoByAdd wastebasketDtoByAdd
+            , @RequestParam("files") MultipartFile[] files
+            , Principal principal) {
 
         Wastebasket wastebasket = modelMapper.map(wastebasketDtoByAdd, Wastebasket.class);
-        wasteBasketService.addWastebasket(wastebasket, user, images);
+        User user = userService.getUserByEmail(principal.getName());
+
+        wasteBasketService.addWastebasket(wastebasket, user, files);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
