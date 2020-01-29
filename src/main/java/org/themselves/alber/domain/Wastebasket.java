@@ -20,6 +20,8 @@ public class Wastebasket extends BaseEntity {
 
     private String boxName;
 
+    private String areaDesc;
+
     private String areaSi;
 
     private String areaGu;
@@ -29,8 +31,6 @@ public class Wastebasket extends BaseEntity {
     private String latitude;
 
     private String longitude;
-
-    private String address;
 
     @Enumerated(EnumType.STRING)
     private GarType garType;
@@ -47,5 +47,5 @@ public class Wastebasket extends BaseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")
-    private List<Image> imageList = new ArrayList<>();
+    private List<WastebasketImage> imageList = new ArrayList<>();
 }

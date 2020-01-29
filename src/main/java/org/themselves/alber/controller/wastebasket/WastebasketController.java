@@ -14,7 +14,6 @@ import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
 import org.themselves.alber.service.UserService;
 import org.themselves.alber.service.WasteBasketService;
-
 import java.security.Principal;
 
 @RestController
@@ -27,7 +26,6 @@ public class WastebasketController {
     private final WasteBasketService wasteBasketService;
 
     private final UserService userService;
-
 
     /**
      * 쓰레기통 등록
