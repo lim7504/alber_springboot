@@ -14,11 +14,12 @@ import java.util.List;
 
 @Entity
 @Getter @Setter
+@TableGenerator(name="SEQ_USER", table="SEQUENCES", pkColumnValue="USER_SEQ", allocationSize=1)
 @ToString(of = {"id","nickname","email"})
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue
-    @Column(name = "member_id")
+    @Id @GeneratedValue(strategy=GenerationType.TABLE, generator="SEQ_USER")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(unique=true)
@@ -46,7 +47,7 @@ public class User extends BaseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
-    private List<UserPin> userPinList = new ArrayList<>();
+    private List<Pin> userPinList = new ArrayList<>();
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);

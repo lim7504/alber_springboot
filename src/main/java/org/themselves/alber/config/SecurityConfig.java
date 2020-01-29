@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/").permitAll()
-                .mvcMatchers(HttpMethod.POST,"/users","/session").permitAll()
+                .mvcMatchers(HttpMethod.POST,"/users","/users/test","/session").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 

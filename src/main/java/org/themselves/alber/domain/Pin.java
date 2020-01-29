@@ -7,9 +7,9 @@ import org.themselves.alber.domain.common.BaseCreatedEntity;
 import javax.persistence.*;
 
 @Entity
-@IdClass(UserPinId.class)
+@IdClass(PinWastebasketId.class)
 @Getter @Setter
-public class UserPin extends BaseCreatedEntity {
+public class Pin extends BaseCreatedEntity {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

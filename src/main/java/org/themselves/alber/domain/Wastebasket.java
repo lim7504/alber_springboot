@@ -10,10 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@TableGenerator(name="SEQ_WASTEBASKET", table="SEQUENCES", pkColumnValue="WASTEBASKET_SEQ", allocationSize=1)
 @Getter @Setter
 public class Wastebasket extends BaseEntity {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy=GenerationType.TABLE, generator="SEQ_WASTEBASKET")
     @Column(name = "box_id")
     private Long id;
 
@@ -42,7 +43,7 @@ public class Wastebasket extends BaseEntity {
 
     @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")
-    private List<UserPin> userPinList = new ArrayList<>();
+    private List<Pin> userPinList = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")

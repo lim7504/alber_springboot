@@ -27,18 +27,33 @@ public class WastebasketController {
     private final WasteBasketService wasteBasketService;
 
     private final UserService userService;
+
+
     /**
      * 쓰레기통 등록
      * 쓰레기통과 이미지정보를 함께 등록
      * pin도 함께 등록
      */
-    @PostMapping(consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @PostMapping(consumes="multipart/form-data; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 등록")
-    public ResponseEntity<ResponseContent> addWestebasket(@RequestBody WastebasketDtoByAdd wastebasketDtoByAdd
-            , @RequestParam("files") MultipartFile[] files
-            , Principal principal) {
+    public ResponseEntity<ResponseContent> addWestebasket(
+                                                          @RequestParam("boxName") String boxName
+                                                        , @RequestParam("areaSi") String areaSi
+                                                        , @RequestParam("areaGu") String areaGu
+                                                        , @RequestParam("areaDong") String areaDong
+                                                        , @RequestParam("latitude") String latitude
+                                                        , @RequestParam("longitude") String longitude
+                                                        , @RequestParam("files") MultipartFile[] files
+                                                        , Principal principal) {
 
-        Wastebasket wastebasket = modelMapper.map(wastebasketDtoByAdd, Wastebasket.class);
+        Wastebasket wastebasket = new Wastebasket();
+        wastebasket.setBoxName(boxName);
+        wastebasket.setAreaSi(areaSi);
+        wastebasket.setAreaGu(areaGu);
+        wastebasket.setAreaDong(areaDong);
+        wastebasket.setLatitude(latitude);
+        wastebasket.setLongitude(longitude);
+
         User user = userService.getUserByEmail(principal.getName());
 
         wasteBasketService.addWastebasket(wastebasket, user, files);
