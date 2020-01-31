@@ -6,6 +6,9 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.themselves.alber.domain.common.BaseEntity;
+import org.themselves.alber.domain.common.UserSocialType;
+import org.themselves.alber.domain.common.UserStatus;
+import org.themselves.alber.domain.common.UserType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

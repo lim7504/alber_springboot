@@ -1,8 +1,8 @@
 package org.themselves.alber.controller.user;
 import lombok.Data;
-import org.themselves.alber.domain.UserSocialType;
-import org.themselves.alber.domain.UserStatus;
-import org.themselves.alber.domain.UserType;
+import org.themselves.alber.domain.common.UserSocialType;
+import org.themselves.alber.domain.common.UserStatus;
+import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.domain.common.BaseEntity;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,6 @@
 package org.themselves.alber.controller.user;
 
 import lombok.Data;
-import lombok.Setter;
-import org.themselves.alber.domain.UserStatus;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
