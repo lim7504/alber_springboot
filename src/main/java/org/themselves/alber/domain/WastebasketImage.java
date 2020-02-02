@@ -20,4 +20,10 @@ public class WastebasketImage extends BaseCreatedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "box_id")
     private Wastebasket wastebasket;
+
+    public void setWastebasket(Wastebasket wastebasket) {
+        this.wastebasket = wastebasket;
+        wastebasket.getImageList().add(this);
+    }
+
 }

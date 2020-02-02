@@ -1,6 +1,7 @@
 package org.themselves.alber.controller.wastebasket;
 
 import lombok.Data;
+import org.themselves.alber.domain.WastebasketImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,6 @@ public class WastebasketDto {
     private String areaDong;
     private String latitude;
     private String longitude;
-    private List<String> imageList = new ArrayList<>();
+    private List<String> imageUrlList = new ArrayList<>();
 
 }

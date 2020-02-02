@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.session.UserLoginDto;
+import org.themselves.alber.controller.user.UserDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
@@ -72,11 +73,11 @@ public class WastebasketController {
     @ApiOperation(value = "쓰레기통 상세")
     public ResponseEntity<ResponseContent<WastebasketDto>> getWastebaseketOne(@PathVariable Long id) {
 
-        WastebasketDto wastebasketOne = wasteBasketService.getWastebasketOne(id);
+        WastebasketDto wastebasketDto = wasteBasketService.getWastebasketOne(id);
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseContent<WastebasketDto>(StatusCode.SUCCESS,wastebasketOne));
+                .body(new ResponseContent<WastebasketDto>(StatusCode.SUCCESS,wastebasketDto));
     }
 
 
@@ -87,19 +88,61 @@ public class WastebasketController {
      * 간이 정보, 사진
      */
 
+
+
     /**
      * 쓰레기통 수정
      * 이미지 수정가능
      * 본인이 작성하지 않은 댓글은 수정 불가
      * pin을 등록한 유저만이 수정가능
      */
+    @PutMapping(value = "/{id}", consumes = "multipart/form-data; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "쓰레기통 수정")
+    public ResponseEntity<ResponseContent> setWastebaseketOne(@PathVariable Long id
+                                                                            , @RequestParam("boxName") String boxName
+                                                                            , @RequestParam("areaDesc") String areaDesc
+                                                                            , @RequestParam("areaSi") String areaSi
+                                                                            , @RequestParam("areaGu") String areaGu
+                                                                            , @RequestParam("areaDong") String areaDong
+                                                                            , @RequestParam("latitude") String latitude
+                                                                            , @RequestParam("longitude") String longitude
+                                                                            , @RequestParam("files") MultipartFile[] files) {
+
+        Wastebasket requestWastebasket = new Wastebasket();
+        requestWastebasket.setId(id);
+        requestWastebasket.setBoxName(boxName);
+        requestWastebasket.setAreaDesc(areaDesc);
+        requestWastebasket.setAreaSi(areaSi);
+        requestWastebasket.setAreaGu(areaGu);
+        requestWastebasket.setAreaDong(areaDong);
+        requestWastebasket.setLatitude(latitude);
+        requestWastebasket.setLongitude(longitude);
+
+        wasteBasketService.setWastebasketOne(requestWastebasket, files);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseContent(StatusCode.SUCCESS));
+    }
+
 
     /**
      * 쓰레기통 삭제
      * 댓글이 달리지 않은 쓰레기통만 삭제
      * pin을 등록한 유저만 삭제가능
      */
+    @DeleteMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "쓰레기통 삭제")
+    public ResponseEntity<ResponseContent> delWastebasket(@PathVariable Long id
+                                                            ,Principal principal) {
 
+        User user = userService.getUserByEmail(principal.getName());
+        wasteBasketService.delWastebasket(id, user);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseContent(StatusCode.SUCCESS));
+    }
 
     /**
      * 쓰레기통 댓글 등록

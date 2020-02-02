@@ -6,6 +6,7 @@ import org.themselves.alber.config.response.StatusCode;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.UUID;
 
 public class FileUtil {
 
@@ -17,6 +18,21 @@ public class FileUtil {
             if (!directory.exists()) {
                 directory.mkdir();
             }
+        } catch (Exception e){
+            throw new CustomException(StatusCode.FILE_CREATE_ERROR);
+        }
+
+        return directory.toPath();
+    }
+
+    public static Path directoryDeleteAndCreate(String url) {
+
+        File directory = new File(url);
+        directory.delete();
+
+        try{
+            directory.mkdir();
+
         } catch (Exception e){
             throw new CustomException(StatusCode.FILE_CREATE_ERROR);
         }
@@ -36,4 +52,16 @@ public class FileUtil {
         else
             throw new CustomException(StatusCode.FILE_NOT_IMAGE_ERROR);
     }
+
+    public static String ChangeFileName(String originFileName) {
+        String ext = originFileName.substring(originFileName.lastIndexOf('.')); // 확장자 String saveFileName = getUuid() + ext;
+        return getUuid() + ext;
+    }
+
+    //uuid생성
+    public static String getUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+
 }
