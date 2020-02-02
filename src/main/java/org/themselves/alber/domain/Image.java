@@ -19,7 +19,4 @@ public class Image extends BaseCreatedEntity {
 
     private String url;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "box_id")
-    private Wastebasket wastebasket;
 }

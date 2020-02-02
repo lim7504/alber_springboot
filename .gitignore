@@ -32,3 +32,6 @@ build/
 
 ### DB Connect Info###
 /src/main/resources/db.yml
+
+### Upload Resource###
+image/

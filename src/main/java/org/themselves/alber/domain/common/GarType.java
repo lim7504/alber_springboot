@@ -1,4 +1,4 @@
-package org.themselves.alber.domain;
+package org.themselves.alber.domain.common;
 
 public enum GarType {
       Standard // 일반쓰레기

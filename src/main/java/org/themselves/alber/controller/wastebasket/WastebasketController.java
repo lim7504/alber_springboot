@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.session.UserLoginDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
+import org.themselves.alber.repository.WastebasketImageRepository;
 import org.themselves.alber.service.UserService;
 import org.themselves.alber.service.WasteBasketService;
-
 import java.security.Principal;
 
 @RestController
@@ -27,7 +28,6 @@ public class WastebasketController {
     private final WasteBasketService wasteBasketService;
 
     private final UserService userService;
-
 
     /**
      * 쓰레기통 등록
@@ -68,6 +68,17 @@ public class WastebasketController {
      * 아무나 가능~~
      * 댓글도 한번에 불러오기 등록된 순서 내림차순
      */
+    @GetMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "쓰레기통 상세")
+    public ResponseEntity<ResponseContent<WastebasketDto>> getWastebaseketOne(@PathVariable Long id) {
+
+        WastebasketDto wastebasketOne = wasteBasketService.getWastebasketOne(id);
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseContent<WastebasketDto>(StatusCode.SUCCESS,wastebasketOne));
+    }
+
 
     /**
      * 주변 500m에 있는 쓰레기통 보기
