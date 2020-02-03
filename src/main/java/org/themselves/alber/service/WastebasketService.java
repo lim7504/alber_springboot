@@ -28,7 +28,7 @@ import java.util.Optional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class WasteBasketService {
+public class WastebasketService {
 
     private final WastebasketRepository wastebasketRepository;
     private final PinRepository pinRepository;

@@ -3,7 +3,7 @@ package org.themselves.alber.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PinWastebasketId implements Serializable {
+public class PinId implements Serializable {
 
     private Long user;
 
@@ -13,7 +13,7 @@ public class PinWastebasketId implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PinWastebasketId userPinId = (PinWastebasketId) o;
+        PinId userPinId = (PinId) o;
         return Objects.equals(user, userPinId.user) &&
                 Objects.equals(wastebasket, userPinId.wastebasket);
     }

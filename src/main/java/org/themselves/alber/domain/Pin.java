@@ -7,7 +7,7 @@ import org.themselves.alber.domain.common.BaseCreatedEntity;
 import javax.persistence.*;
 
 @Entity
-@IdClass(PinWastebasketId.class)
+@IdClass(PinId.class)
 @Getter @Setter
 public class Pin extends BaseCreatedEntity {
 
