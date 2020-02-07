@@ -17,8 +17,9 @@ public enum StatusCode {
 
     //Wastebasket
     WASTEBASKET_NOT_FOUND("WB_001", "해당 쓰레기통을 찾을 수 없습니다.", 400),
-    WASTEBASKET_DON_T_DELETE_NO_USER("WB_002", "해당 쓰레기통의 게시자가 아닙니다.", 400),
-
+    WASTEBASKETCOMMENT_NOT_FOUND("WB_002", "해당 댓글을 찾을 수 없습니다.", 400),
+    WASTEBASKET_NOT_SAME_USER("WB_003", "해당 쓰레기통의 게시자가 아닙니다.", 400),
+    WASTEBASKETCOMMENT_NOT_SAME_USER("WB_004", "해당 댓글의 게시자가 아닙니다.", 400),
     //Session
     SUCCESS_LOGIN("SS_001", "로그인에 성공하였습니다.", 200),
     FAIL_LOGIN("SS_002", "로그인에 실패하였습니다.", 400),

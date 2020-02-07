@@ -18,5 +18,5 @@ public class WastebasketDto {
     private String latitude;
     private String longitude;
     private List<String> imageUrlList = new ArrayList<>();
-
+    private List<WastebasketCommentDto> commentDtoList = new ArrayList<>();
 }

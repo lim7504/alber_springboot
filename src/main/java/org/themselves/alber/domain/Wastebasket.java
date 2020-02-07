@@ -49,4 +49,8 @@ public class Wastebasket extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")
     private List<WastebasketImage> imageList = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "wastebasket")
+    private List<WastebasketComment> wastebasketCommentList = new ArrayList<>();
 }

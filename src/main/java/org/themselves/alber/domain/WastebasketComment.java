@@ -7,7 +7,7 @@ import org.themselves.alber.domain.common.BaseCreatedEntity;
 import javax.persistence.*;
 
 @Entity
-@IdClass(WastebasketCommentId.class)
+//@IdClass(WastebasketCommentId.class)
 @TableGenerator(name="SEQ_WASTEBASKET_COMMENT", table="SEQUENCES", pkColumnValue="WASTEBASKET_COMMENT_SEQ", allocationSize=1)
 @Getter @Setter
 public class WastebasketComment extends BaseCreatedEntity {
@@ -17,13 +17,13 @@ public class WastebasketComment extends BaseCreatedEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "box_id")
     private Wastebasket wastebasket;
 
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    private String contents;
 }

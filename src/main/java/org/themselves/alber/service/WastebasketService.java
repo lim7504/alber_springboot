@@ -86,22 +86,13 @@ public class WastebasketService {
 
     }
 
-    public WastebasketDto getWastebasketOne(Long id) {
+    public Wastebasket getWastebasketOne(Long id) {
 
         Optional<Wastebasket> wastebasket = wastebasketRepository.findById(id);
         if (!wastebasket.isPresent())
             throw new CustomException(StatusCode.WASTEBASKET_NOT_FOUND);
 
-        WastebasketDto wastebasketDto = modelMapper.map(wastebasket.get(), WastebasketDto.class);
-
-        for(WastebasketImage wastebasketImage : wastebasket.get().getImageList()){
-            Optional<Image> image = imageRepository.findById(wastebasketImage.getImage().getId());
-            if (!image.isPresent())
-                throw new CustomException(StatusCode.INTERNAL_SERVER_ERROR);
-
-            wastebasketDto.getImageUrlList().add(image.get().getUrl());
-        }
-        return wastebasketDto;
+        return wastebasket.get();
     }
 
     @Transactional
@@ -178,7 +169,7 @@ public class WastebasketService {
 
         //본인이 올린 쓰레기통이 아니라면
         if(!user.getId().equals(pin.getUser().getId()))
-            throw new CustomException(StatusCode.WASTEBASKET_DON_T_DELETE_NO_USER);
+            throw new CustomException(StatusCode.WASTEBASKET_NOT_SAME_USER);
 
         //쓰레기통이미지/이미지삭제
         for (WastebasketImage wastebasketImage : wastebasket.get().getImageList()){
