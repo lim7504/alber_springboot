@@ -1,6 +1,8 @@
 package org.themselves.alber.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,8 +45,8 @@ public class UserService {
             userRepository.save(user);
     }
 
-    public List<User> getUserAll(){
-        return userRepository.findAll();
+    public Page<User> getUserAll(Pageable pageable){
+        return userRepository.findAll(pageable);
     }
 
     public User getUserOne(Long id) {

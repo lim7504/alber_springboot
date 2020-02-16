@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,10 +60,10 @@ public class UserAdminController {
 
     @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원리스트조회")
-    public ResponseEntity<ResponseContent<List<UserDtoByAdmin>>> getUserAll() {
+    public ResponseEntity<ResponseContent<List<UserDtoByAdmin>>> getUserAll(Pageable pageable) {
 
         List<UserDtoByAdmin> userDtoList = new ArrayList<>();
-        for (User user : userService.getUserAll())
+        for (User user : userService.getUserAll(pageable))
             userDtoList.add(modelMapper.map(user, UserDtoByAdmin.class));
 
         return ResponseEntity

@@ -2,6 +2,8 @@ package org.themselves.alber.service;
 
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -93,6 +95,10 @@ public class WastebasketService {
             throw new CustomException(StatusCode.WASTEBASKET_NOT_FOUND);
 
         return wastebasket.get();
+    }
+
+    public Page<Wastebasket> getWastebasketAll(Pageable pageable){
+        return wastebasketRepository.findAll(pageable);
     }
 
     @Transactional

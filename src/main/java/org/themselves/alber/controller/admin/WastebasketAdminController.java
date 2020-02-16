@@ -1,9 +1,10 @@
-package org.themselves.alber.controller.wastebasket;
+package org.themselves.alber.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.user.UserDtoByAdmin;
+import org.themselves.alber.controller.wastebasket.WastebasketCommentDto;
+import org.themselves.alber.controller.wastebasket.WastebasketDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
 import org.themselves.alber.domain.WastebasketComment;
@@ -26,9 +29,9 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/wastebasket")
-@Api(description = "쓰레기통")
-public class WastebasketController {
+@RequestMapping("/admin/wastebasket")
+@Api(description = "쓰레기통_어드민")
+public class WastebasketAdminController {
 
     private final ModelMapper modelMapper;
 
@@ -115,7 +118,18 @@ public class WastebasketController {
      * 쓰레기통 전체보기
      *
      */
+    @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "쓰레기통리스트조회")
+    public ResponseEntity<ResponseContent<List<WastebasketDto>>> getWastebasketAll(Pageable pageable) {
 
+        List<WastebasketDto> wastebasketDtoList = new ArrayList<>();
+        for (Wastebasket wastebasket : wasteBasketService.getWastebasketAll(pageable))
+            wastebasketDtoList.add(modelMapper.map(wastebasket, WastebasketDto.class));
+
+        return ResponseEntity
+                .ok()
+                .body( new ResponseContent<>(StatusCode.SUCCESS, wastebasketDtoList));
+    }
 
     /**
      * 쓰레기통 수정
