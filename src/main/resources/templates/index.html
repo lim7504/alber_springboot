@@ -1,3 +1,4 @@
+<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +6,19 @@
     <title>Title</title>
 </head>
 <body>
-    License of Alber
+<h1>Cors Client</h1>
+<script src="https://code.jquery.com/jquery-2.2.1.js"></script>
+<script>
+    $(function(){
+        $.ajax("http://localhost:8080/hello")
+            .done(function(msg){
+                alert(msg);
+            })
+            .fail(function(){
+                alert("fail");
+            })
+    })
+</script>
 </body>
 </html>
+
