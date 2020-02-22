@@ -17,8 +17,10 @@ import org.themselves.alber.repository.PinRepository;
 import org.themselves.alber.repository.WastebasketImageRepository;
 import org.themselves.alber.repository.WastebasketRepository;
 import org.themselves.alber.util.FileUtil;
+import org.themselves.alber.util.S3Uploader;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -37,6 +39,7 @@ public class WastebasketService {
     private final ImageRepository imageRepository;
     private final WastebasketImageRepository wastebasketImageRepository;
     private final ModelMapper modelMapper;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     public void addWastebasket(Wastebasket wastebasket, User user, MultipartFile[] files) {
@@ -68,9 +71,15 @@ public class WastebasketService {
             if(!FileUtil.fileEqImage(file))
                 throw new CustomException(StatusCode.FILE_NOT_IMAGE_ERROR);
 
+            String url;
+            try {
+                url = s3Uploader.upload(file);
+            } catch (IOException e) {
+                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
+            }
+
             //이미지저장
             Image image = new Image();
-            String url = childPath.toString() + File.separator + FileUtil.ChangeFileName(file.getOriginalFilename());
             image.setUrl(url);
             imageRepository.save(image);
             //쓰레기통 이미지 저장
@@ -79,11 +88,23 @@ public class WastebasketService {
             wi.setWastebasket(newWastebaseket);
             wastebasketImageRepository.save(wi);
 
-            try {
-                Files.copy(file.getInputStream(), new File(image.getUrl()).toPath());
-            }catch (Exception e){
-                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
-            }
+
+//            //이미지저장
+//            Image image = new Image();
+//            String url = childPath.toString() + File.separator + FileUtil.ChangeFileName(file.getOriginalFilename());
+//            image.setUrl(url);
+//            imageRepository.save(image);
+//            //쓰레기통 이미지 저장
+//            WastebasketImage wi = new WastebasketImage();
+//            wi.setImage(image);
+//            wi.setWastebasket(newWastebaseket);
+//            wastebasketImageRepository.save(wi);
+//
+//            try {
+//                Files.copy(file.getInputStream(), new File(image.getUrl()).toPath());
+//            }catch (Exception e){
+//                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
+//            }
         }
 
     }
@@ -142,9 +163,16 @@ public class WastebasketService {
             if (!FileUtil.fileEqImage(file))
                 throw new CustomException(StatusCode.FILE_NOT_IMAGE_ERROR);
 
+            String url;
+            try {
+                url = s3Uploader.upload(file);
+            } catch (IOException e) {
+                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
+            }
+
             //이미지저장
             Image image = new Image();
-            String url = childPath.toString() + File.separator + FileUtil.ChangeFileName(file.getOriginalFilename());
+
             image.setUrl(url);
             imageRepository.save(image);
 
@@ -154,11 +182,6 @@ public class WastebasketService {
             wi.setWastebasket(updateWastebasket.get());
             wastebasketImageRepository.save(wi);
 
-            try {
-                Files.copy(file.getInputStream(), new File(image.getUrl()).toPath());
-            } catch (Exception e) {
-                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
-            }
         }
     }
 

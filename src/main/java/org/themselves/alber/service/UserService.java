@@ -45,6 +45,24 @@ public class UserService {
             userRepository.save(user);
     }
 
+    @Transactional
+    public void JoinUserAdmin(User user) {
+
+        if (userRepository.findByEmail(user.getEmail()).isPresent())
+            throw new CustomException(StatusCode.EMAIL_DUPLICATION);
+
+        if (userRepository.findByNickname(user.getNickname()).isPresent())
+            throw new CustomException(StatusCode.NICKNAME_DUPLICATION);
+
+        user.setSocialType(UserSocialType.None);
+        user.setLastLoginDate(LocalDateTime.now());
+        user.setStatus(UserStatus.ACTIVE);
+        user.setType(UserType.ADMIN);
+        user.encodePassword(passwordEncoder);
+
+        userRepository.save(user);
+    }
+
     public Page<User> getUserAll(Pageable pageable){
         return userRepository.findAll(pageable);
     }
