@@ -24,20 +24,20 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
         for(int i = 0; i< 100; i++){
-//            User user = new User();
-//            user.setNickname("TestUser" + i);
-//            user.setEmail("TestUser" + i + "@alber.org");
-//            user.setPassword("123123");
-//            userService.JoinUser(user);
+            User user = new User();
+            user.setNickname("TestUser" + i);
+            user.setEmail("TestUser" + i + "@alber.org");
+            user.setPassword("123123");
+            userService.JoinUser(user);
 
-//            Wastebasket wastebasket = new Wastebasket();
-//            wastebasket.setBoxName("box" + i);
-//            wastebasket.setAreaSi("서울시");
-//            wastebasket.setAreaGu("강남구");
-//            wastebasket.setAreaDong("서초동");
-//            wastebasket.setLatitude("37.131123");
-//            wastebasket.setLongitude("126.123122");
-//            wastebasketRepository.save(wastebasket);
+            Wastebasket wastebasket = new Wastebasket();
+            wastebasket.setBoxName("box" + i);
+            wastebasket.setAreaSi("서울시");
+            wastebasket.setAreaGu("강남구");
+            wastebasket.setAreaDong("서초동");
+            wastebasket.setLatitude("37.131123");
+            wastebasket.setLongitude("126.123122");
+            wastebasketRepository.save(wastebasket);
         }
 
 
