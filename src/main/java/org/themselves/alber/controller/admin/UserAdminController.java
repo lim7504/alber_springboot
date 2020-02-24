@@ -18,7 +18,6 @@ import org.themselves.alber.domain.User;
 import org.themselves.alber.service.UserService;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class UserAdminController {
         throw new CustomException(StatusCode.PASSWORD_PASSWORDCHECK_ALONG);
 
         User user = modelMapper.map(userJoinDto, User.class);
-        userService.JoinUser(user);
+        userService.joinUserAdmin(user);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

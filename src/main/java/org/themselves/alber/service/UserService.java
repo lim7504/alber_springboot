@@ -28,7 +28,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void JoinUser(User user) {
+    public void joinUser(User user) {
 
             if (userRepository.findByEmail(user.getEmail()).isPresent())
                 throw new CustomException(StatusCode.EMAIL_DUPLICATION);
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     @Transactional
-    public void JoinUserAdmin(User user) {
+    public void joinUserAdmin(User user) {
 
         if (userRepository.findByEmail(user.getEmail()).isPresent())
             throw new CustomException(StatusCode.EMAIL_DUPLICATION);

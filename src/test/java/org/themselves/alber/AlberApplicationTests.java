@@ -1,7 +1,5 @@
 package org.themselves.alber;
 
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +12,6 @@ import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.service.UserService;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.config.location=classpath:/application.yml,classpath:/db.yml")
@@ -39,7 +36,7 @@ class AlberApplicationTests {
 		user.setNickname("둘리");
 		user.setEmail("abcd@abcd");
 		user.setPassword("1234");
-		userService.JoinUser(user);
+		userService.joinUser(user);
 
 
 
