@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.session;
+package org.themselves.alber.controller.session.dto;
 
 import lombok.Data;
 

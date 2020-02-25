@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.wastebasket;
+package org.themselves.alber.controller.wastebasket.dto;
 
 import lombok.Data;
 

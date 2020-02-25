@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.common;
+package org.themselves.alber.controller.common.dto;
 
 import lombok.Data;
 

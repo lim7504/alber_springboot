@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.common.dto.ImageDto;
 import org.themselves.alber.service.CommonService;
 
 @RestController @RequiredArgsConstructor

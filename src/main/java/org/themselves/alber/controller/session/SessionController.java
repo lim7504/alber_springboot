@@ -1,6 +1,5 @@
 package org.themselves.alber.controller.session;
 
-import io.jsonwebtoken.Jwts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.JwtTokenProvider;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.session.dto.UserLoginDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.service.SessionService;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 

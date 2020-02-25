@@ -1,7 +1,7 @@
-package org.themselves.alber.controller.wastebasket;
+package org.themselves.alber.controller.wastebasket.dto;
 
 import lombok.Data;
-import org.themselves.alber.domain.WastebasketImage;
+import org.themselves.alber.controller.wastebasket.dto.WastebasketCommentDto;
 
 import java.util.ArrayList;
 import java.util.List;

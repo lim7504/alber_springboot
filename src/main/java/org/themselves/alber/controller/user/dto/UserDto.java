@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.user;
+package org.themselves.alber.controller.user.dto;
 import lombok.Data;
 
 @Data

@@ -7,6 +7,7 @@ import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.repository.ImageRepository;
+import org.themselves.alber.util.FileUtil;
 import org.themselves.alber.util.S3Uploader;
 
 import java.io.IOException;
@@ -19,6 +20,10 @@ public class CommonService {
     private final ImageRepository imageRepository;
 
     public Long imageFileUpload(MultipartFile file){
+
+        if(!FileUtil.fileEqImage(file))
+            throw new CustomException(StatusCode.FILE_NOT_IMAGE_ERROR);
+
         String url;
         try {
             url = s3Uploader.upload(file);

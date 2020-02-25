@@ -1,4 +1,4 @@
-package org.themselves.alber.controller.user;
+package org.themselves.alber.controller.user.dto;
 import lombok.Data;
 import org.themselves.alber.domain.common.UserSocialType;
 import org.themselves.alber.domain.common.UserStatus;

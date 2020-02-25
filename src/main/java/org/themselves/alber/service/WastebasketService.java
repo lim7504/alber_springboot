@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.wastebasket.WastebasketDto;
 import org.themselves.alber.domain.*;
 import org.themselves.alber.domain.common.GarType;
 import org.themselves.alber.repository.ImageRepository;
@@ -21,11 +20,7 @@ import org.themselves.alber.util.S3Uploader;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +103,44 @@ public class WastebasketService {
         }
 
     }
+
+    @Transactional
+    public void addWastebasket2(Wastebasket wastebasket, User user, List<Long> imageList) {
+
+        //이미지가 3개 이상이면??
+        if(imageList.size() > 3) {
+            throw new CustomException(StatusCode.FILE_TO_MUCH_ERROR);
+        }
+
+        //위도 경도에 따라 행정구역을 받아오는 API 필요 아니면 클라에서 받아오면 되나?
+        wastebasket.setGarType(GarType.Standard); //쓰레기통 종류 사용은 보류
+        wastebasket.setUserRegisterYn(Boolean.TRUE);
+
+        //쓰레기통 저장
+        Wastebasket newWastebaseket = wastebasketRepository.save(wastebasket);
+
+        //핀저장
+        Pin pin = new Pin();
+        pin.setUser(user);
+        pin.setWastebasket(newWastebaseket);
+        pinRepository.save(pin);
+
+        for(Long imageId : imageList) {
+
+            Optional<Image> op_image = imageRepository.findById(imageId);
+            if(!op_image.isPresent())
+                throw new CustomException(StatusCode.IMAGE_NOT_FOUND);
+            //쓰레기통 이미지 저장
+            WastebasketImage wi = new WastebasketImage();
+            wi.setImage(op_image.get());
+            wi.setWastebasket(newWastebaseket);
+            wastebasketImageRepository.save(wi);
+        }
+
+
+    }
+
+
 
     public Wastebasket getWastebasketOne(Long id) {
 

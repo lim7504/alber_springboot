@@ -20,6 +20,7 @@ public enum StatusCode {
     WASTEBASKETCOMMENT_NOT_FOUND("WB_002", "해당 댓글을 찾을 수 없습니다.", 400),
     WASTEBASKET_NOT_SAME_USER("WB_003", "해당 쓰레기통의 게시자가 아닙니다.", 400),
     WASTEBASKETCOMMENT_NOT_SAME_USER("WB_004", "해당 댓글의 게시자가 아닙니다.", 400),
+
     //Session
     SUCCESS_LOGIN("SS_001", "로그인에 성공하였습니다.", 200),
     FAIL_LOGIN("SS_002", "로그인에 실패하였습니다.", 400),
@@ -30,6 +31,7 @@ public enum StatusCode {
     INPUT_VALUE_INVALID("CM_003", "입력값이 올바르지 않습니다.", 400),
     FILE_TO_MUCH_ERROR("CM_004", "파일이 너무 많습니다. (최대 3개)", 400),
     FILE_NOT_IMAGE_ERROR("CM_005", "파일이 이미지가 아닙니다. 이미지를 등록하여 주세요.", 400),
+    IMAGE_NOT_FOUND("CM_006", "해당 이미지를 찾을 수 없습니다.", 400),
     FILE_CREATE_ERROR("CM_007", "파일생성에러 입니다. 관리자에게 문의해 주세요", 500),
     INTERNAL_SERVER_ERROR("CM_999", "서버에러 입니다. 관리자에게 문의해 주세요", 500);
 
