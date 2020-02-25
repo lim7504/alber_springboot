@@ -53,7 +53,7 @@ public class WastebasketController {
         Wastebasket wastebasket = modelMapper.map(wastebasketAddDto, Wastebasket.class);
         User user = userService.getUserByEmail(principal.getName());
 
-        wasteBasketService.addWastebasket2(wastebasket, user, wastebasketAddDto.getImageList());
+        wasteBasketService.addWastebasket(wastebasket, user, wastebasketAddDto.getImageList());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.wastebasket.dto.WastebasketAddDto;
 import org.themselves.alber.controller.wastebasket.dto.WastebasketCommentDto;
 import org.themselves.alber.controller.wastebasket.dto.WastebasketDto;
 import org.themselves.alber.domain.User;
@@ -47,29 +48,14 @@ public class WastebasketAdminController {
      * 쓰레기통과 이미지정보를 함께 등록
      * pin도 함께 등록
      */
-    @PostMapping(consumes = "multipart/form-data; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @PostMapping(consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 등록")
-    public ResponseEntity<ResponseContent> addWestebasket(
-            @RequestParam("boxName") String boxName
-            , @RequestParam("areaSi") String areaSi
-            , @RequestParam("areaGu") String areaGu
-            , @RequestParam("areaDong") String areaDong
-            , @RequestParam("latitude") String latitude
-            , @RequestParam("longitude") String longitude
-            , @RequestParam("files") MultipartFile[] files
-            , Principal principal) {
+    public ResponseEntity<ResponseContent> addWestebasket(@RequestBody @Valid WastebasketAddDto wastebasketAddDto, Principal principal) {
 
-        Wastebasket wastebasket = new Wastebasket();
-        wastebasket.setBoxName(boxName);
-        wastebasket.setAreaSi(areaSi);
-        wastebasket.setAreaGu(areaGu);
-        wastebasket.setAreaDong(areaDong);
-        wastebasket.setLatitude(latitude);
-        wastebasket.setLongitude(longitude);
-
+        Wastebasket wastebasket = modelMapper.map(wastebasketAddDto, Wastebasket.class);
         User user = userService.getUserByEmail(principal.getName());
 
-        wasteBasketService.addWastebasket(wastebasket, user, files);
+        wasteBasketService.addWastebasket(wastebasket, user, wastebasketAddDto.getImageList());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

@@ -37,75 +37,7 @@ public class WastebasketService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public void addWastebasket(Wastebasket wastebasket, User user, MultipartFile[] files) {
-
-        //파일이 3개 이상이면??
-        if(files.length > 3) {
-            throw new CustomException(StatusCode.FILE_TO_MUCH_ERROR);
-        }
-
-        wastebasket.setGarType(GarType.Standard); //쓰레기통 종류 사용은 보류
-        wastebasket.setUserRegisterYn(Boolean.TRUE);
-
-        //쓰레기통 저장
-        Wastebasket newWastebaseket = wastebasketRepository.save(wastebasket);
-
-        //핀저장
-        Pin pin = new Pin();
-        pin.setUser(user);
-        pin.setWastebasket(newWastebaseket);
-        pinRepository.save(pin);
-
-        Path rootPath = FileUtil.directoryExistAndCreate("image");
-        Path childPath = FileUtil.directoryExistAndCreate(rootPath.toString()
-                + File.separator + "wastebasket_" + newWastebaseket.getId());
-
-        for(MultipartFile file : files) {
-
-            //파일 형식이 이미지가 아니면?
-            if(!FileUtil.fileEqImage(file))
-                throw new CustomException(StatusCode.FILE_NOT_IMAGE_ERROR);
-
-            String url;
-            try {
-                url = s3Uploader.upload(file);
-            } catch (IOException e) {
-                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
-            }
-
-            //이미지저장
-            Image image = new Image();
-            image.setUrl(url);
-            imageRepository.save(image);
-            //쓰레기통 이미지 저장
-            WastebasketImage wi = new WastebasketImage();
-            wi.setImage(image);
-            wi.setWastebasket(newWastebaseket);
-            wastebasketImageRepository.save(wi);
-
-
-//            //이미지저장
-//            Image image = new Image();
-//            String url = childPath.toString() + File.separator + FileUtil.ChangeFileName(file.getOriginalFilename());
-//            image.setUrl(url);
-//            imageRepository.save(image);
-//            //쓰레기통 이미지 저장
-//            WastebasketImage wi = new WastebasketImage();
-//            wi.setImage(image);
-//            wi.setWastebasket(newWastebaseket);
-//            wastebasketImageRepository.save(wi);
-//
-//            try {
-//                Files.copy(file.getInputStream(), new File(image.getUrl()).toPath());
-//            }catch (Exception e){
-//                throw new CustomException(StatusCode.FILE_CREATE_ERROR);
-//            }
-        }
-
-    }
-
-    @Transactional
-    public void addWastebasket2(Wastebasket wastebasket, User user, List<Long> imageList) {
+    public void addWastebasket(Wastebasket wastebasket, User user, List<Long> imageList) {
 
         //이미지가 3개 이상이면??
         if(imageList.size() > 3) {
