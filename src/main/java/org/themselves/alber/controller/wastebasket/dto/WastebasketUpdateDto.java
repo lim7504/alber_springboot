@@ -6,16 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class WastebasketDto {
+public class WastebasketUpdateDto {
 
-    private Long id;
     private String boxName;
     private String areaDesc;
-    private String areaSi;
-    private String areaGu;
-    private String areaDong;
     private String latitude;
     private String longitude;
     private List<String> imageList = new ArrayList<>();
-    private List<WastebasketCommentRequestDto> commentDtoList = new ArrayList<>();
 }

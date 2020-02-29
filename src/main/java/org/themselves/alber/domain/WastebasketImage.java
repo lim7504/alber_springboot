@@ -23,7 +23,7 @@ public class WastebasketImage extends BaseCreatedEntity {
 
     public void setWastebasket(Wastebasket wastebasket) {
         this.wastebasket = wastebasket;
-        wastebasket.getImageList().add(this);
+        wastebasket.getWastebasketImageList().add(this);
     }
 
 }

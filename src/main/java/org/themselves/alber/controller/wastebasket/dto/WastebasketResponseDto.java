@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class WastebasketDto {
+public class WastebasketResponseDto {
 
     private Long id;
     private String boxName;
@@ -17,5 +17,5 @@ public class WastebasketDto {
     private String latitude;
     private String longitude;
     private List<String> imageList = new ArrayList<>();
-    private List<WastebasketCommentRequestDto> commentDtoList = new ArrayList<>();
+    private List<WastebasketCommentResponseDto> commentDtoList = new ArrayList<>();
 }

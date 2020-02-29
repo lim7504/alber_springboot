@@ -24,7 +24,7 @@ public class ImageService {
     public List<String> getImageUrlList(Wastebasket wastebasket) {
 
         List<String> urlList = new ArrayList<>();
-        for(WastebasketImage wastebasketImage : wastebasket.getImageList()){
+        for(WastebasketImage wastebasketImage : wastebasket.getWastebasketImageList()){
             Optional<Image> image = imageRepository.findById(wastebasketImage.getImage().getId());
             if (!image.isPresent())
                 throw new CustomException(StatusCode.INTERNAL_SERVER_ERROR);

@@ -12,5 +12,5 @@ public class WastebasketAddDto {
     private String areaDesc;
     private String latitude;
     private String longitude;
-    private List<Long> imageList = new ArrayList<>();
+    private List<String> imageList = new ArrayList<>();
 }

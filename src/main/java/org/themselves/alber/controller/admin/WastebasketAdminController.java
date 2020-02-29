@@ -8,12 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.wastebasket.dto.WastebasketAddDto;
-import org.themselves.alber.controller.wastebasket.dto.WastebasketCommentDto;
-import org.themselves.alber.controller.wastebasket.dto.WastebasketDto;
+import org.themselves.alber.controller.wastebasket.dto.*;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
 import org.themselves.alber.domain.WastebasketComment;
@@ -69,26 +66,26 @@ public class WastebasketAdminController {
      */
     @GetMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 상세")
-    public ResponseEntity<ResponseContent<WastebasketDto>> getWastebaseketOne(@PathVariable Long id) {
+    public ResponseEntity<ResponseContent<WastebasketResponseDto>> getWastebaseketOne(@PathVariable Long id) {
 
         Wastebasket wastebasket = wasteBasketService.getWastebasketOne(id);
         List<String> imageUrlList = imageService.getImageUrlList(wastebasket);
 
-        WastebasketDto wastebasketDto = modelMapper.map(wastebasket, WastebasketDto.class);
+        WastebasketResponseDto wastebasketDto = modelMapper.map(wastebasket, WastebasketResponseDto.class);
         for (String imageUrl:imageUrlList) {
-            wastebasketDto.getImageUrlList().add(imageUrl);
+            wastebasketDto.getImageList().add(imageUrl);
         }
 
         for (WastebasketComment wastebasketComment : wastebasket.getWastebasketCommentList()) {
-            WastebasketCommentDto wastebasketCommentDto = new WastebasketCommentDto();
-            wastebasketCommentDto.setNickname(wastebasketComment.getUser().getNickname());
-            wastebasketCommentDto.setContents(wastebasketComment.getContents());
-            wastebasketDto.getCommentDtoList().add(wastebasketCommentDto);
+            WastebasketCommentResponseDto wastebasketCommentResponseDto = new WastebasketCommentResponseDto();
+            wastebasketCommentResponseDto.setNickname(wastebasketComment.getUser().getNickname());
+            wastebasketCommentResponseDto.setContents(wastebasketComment.getContents());
+            wastebasketDto.getCommentDtoList().add(wastebasketCommentResponseDto);
         }
 
         return ResponseEntity
                 .ok()
-                .body(new ResponseContent<WastebasketDto>(StatusCode.SUCCESS, wastebasketDto));
+                .body(new ResponseContent<WastebasketResponseDto>(StatusCode.SUCCESS, wastebasketDto));
     }
 
 
@@ -122,35 +119,22 @@ public class WastebasketAdminController {
      * 본인이 작성하지 않은 댓글은 수정 불가
      * pin을 등록한 유저만이 수정가능
      */
-    @PutMapping(value = "/{id}", consumes = "multipart/form-data; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @PutMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 수정")
-    public ResponseEntity<ResponseContent> setWastebaseketOne(@PathVariable Long id
-            , @RequestParam("boxName") String boxName
-            , @RequestParam("areaDesc") String areaDesc
-            , @RequestParam("areaSi") String areaSi
-            , @RequestParam("areaGu") String areaGu
-            , @RequestParam("areaDong") String areaDong
-            , @RequestParam("latitude") String latitude
-            , @RequestParam("longitude") String longitude
-            , @RequestParam("files") MultipartFile[] files) {
+    public ResponseEntity<ResponseContent> setWestebasketOne(@PathVariable Long id,
+                                                             @RequestBody @Valid WastebasketUpdateDto wastebasketUpdateDto
+            , Principal principal) {
 
-        Wastebasket requestWastebasket = new Wastebasket();
-        requestWastebasket.setId(id);
-        requestWastebasket.setBoxName(boxName);
-        requestWastebasket.setAreaDesc(areaDesc);
-        requestWastebasket.setAreaSi(areaSi);
-        requestWastebasket.setAreaGu(areaGu);
-        requestWastebasket.setAreaDong(areaDong);
-        requestWastebasket.setLatitude(latitude);
-        requestWastebasket.setLongitude(longitude);
+        Wastebasket wastebasket = modelMapper.map(wastebasketUpdateDto, Wastebasket.class);
+        wastebasket.setId(id);
+        User user = userService.getUserByEmail(principal.getName());
 
-        wasteBasketService.setWastebasketOne(requestWastebasket, files);
+        wasteBasketService.setWastebasketOne(wastebasket, user, wastebasketUpdateDto.getImageList());
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseContent(StatusCode.SUCCESS));
     }
-
 
     /**
      * 쓰레기통 삭제
@@ -177,11 +161,11 @@ public class WastebasketAdminController {
     @ApiOperation(value = "쓰레기통 댓글 등록")
     public ResponseEntity<ResponseContent> addWastebasketComment(@PathVariable Long id
             , Principal principal
-            , @RequestBody @Valid WastebasketCommentDto wastebasketCommentDto) {
+            , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
         User user = userService.getUserByEmail(principal.getName());
         Wastebasket wastebasket = wasteBasketService.getWastebasketOne(id);
-        wastebasketCommentService.addWastebasketComment(wastebasket, user, wastebasketCommentDto.getContents());
+        wastebasketCommentService.addWastebasketComment(wastebasket, user, wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -196,10 +180,10 @@ public class WastebasketAdminController {
     @ApiOperation(value = "쓰레기통 댓글 수정")
     public ResponseEntity<ResponseContent> setWastebasketComment(@PathVariable Long id
             , Principal principal
-            , @RequestBody @Valid WastebasketCommentDto wastebasketCommentDto) {
+            , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
         User user = userService.getUserByEmail(principal.getName());
-        wastebasketCommentService.setWastebasketComment(user, id, wastebasketCommentDto.getContents());
+        wastebasketCommentService.setWastebasketComment(user, id, wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
                 .ok()
