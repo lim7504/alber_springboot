@@ -1,6 +1,7 @@
 package org.themselves.alber.service;
 
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.user.dto.UserJoinDto;
+import org.themselves.alber.controller.user.dto.UserUpdateDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserSocialType;
 import org.themselves.alber.domain.common.UserStatus;
@@ -24,51 +27,29 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    private final PasswordEncoder passwordEncoder;
-
-    @Transactional
-    public void joinUser(User user) {
-
-            if (userRepository.findByEmail(user.getEmail()).isPresent())
-                throw new CustomException(StatusCode.EMAIL_DUPLICATION);
-
-            if (userRepository.findByNickname(user.getNickname()).isPresent())
-                throw new CustomException(StatusCode.NICKNAME_DUPLICATION);
-
-            user.setSocialType(UserSocialType.None);
-            user.setLastLoginDate(LocalDateTime.now());
-            user.setStatus(UserStatus.ACTIVE);
-            user.setType(UserType.USER);
-            user.encodePassword(passwordEncoder);
-
-            userRepository.save(user);
-    }
+    private final ModelMapper modelMapper;
 
     @Transactional
-    public void joinUserAdmin(User user) {
-
-        if (userRepository.findByEmail(user.getEmail()).isPresent())
+    public void joinUser(UserJoinDto userJoinDto, UserType userType) {
+        if (userRepository.findByEmail(userJoinDto.getEmail()).isPresent())
             throw new CustomException(StatusCode.EMAIL_DUPLICATION);
 
-        if (userRepository.findByNickname(user.getNickname()).isPresent())
+        if (userRepository.findByNickname(userJoinDto.getNickname()).isPresent())
             throw new CustomException(StatusCode.NICKNAME_DUPLICATION);
 
-        user.setSocialType(UserSocialType.None);
-        user.setLastLoginDate(LocalDateTime.now());
-        user.setStatus(UserStatus.ACTIVE);
-        user.setType(UserType.ADMIN);
-        user.encodePassword(passwordEncoder);
+        User user = modelMapper.map(userJoinDto, User.class);
+        user.joinUser(userType);
 
         userRepository.save(user);
     }
+
 
     public Page<User> getUserAll(Pageable pageable){
         return userRepository.findAll(pageable);
     }
 
-    public User getUserOne(Long id) {
 
+    public User getUserOne(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (!user.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
@@ -76,8 +57,8 @@ public class UserService {
         return user.get();
     }
 
-    public User getUserByEmail(String email) {
 
+    public User getUserByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (!user.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
@@ -85,33 +66,46 @@ public class UserService {
         return user.get();
     }
 
-    @Transactional
-    public User updateUser(User user) {
 
-        Optional<User> updateUser = userRepository.findByEmail(user.getEmail());
+    public boolean existUserNickname(String nickname) {
+        Optional<User> user = userRepository.findByNickname(nickname);
+        return user.isPresent();
+    }
+
+
+    @Transactional
+    public User updateUser(UserUpdateDto userUpdateDto, String userEmail) {
+        Optional<User> updateUser = userRepository.findByEmail(userEmail);
         if (!updateUser.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
-        updateUser.get().setNickname(user.getNickname());
-        updateUser.get().setEmail(user.getEmail());
-        updateUser.get().setPassword(user.getPassword());
-
+        updateUser.get().updateUser(userUpdateDto);
         return updateUser.get();
     }
 
+
+    @Transactional
+    public User updateUserAdmin(UserUpdateDto userUpdateDto, Long id) {
+        Optional<User> updateUser = userRepository.findById(id);
+        if (!updateUser.isPresent())
+            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+
+        updateUser.get().updateUser(userUpdateDto);
+        return updateUser.get();
+    }
+
+
     @Transactional
     public void deleteUser(Long id) {
-
         userRepository.deleteById(id);
-
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent())
             throw new CustomException(StatusCode.DELETE_FAIL);
     }
 
+
     @Transactional
     public User exitUser(String email) {
-
         Optional<User> updateUser = userRepository.findByEmail(email);
         if (!updateUser.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
@@ -122,4 +116,9 @@ public class UserService {
         return updateUser.get();
     }
 
+
+    public boolean existUserEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent();
+    }
 }

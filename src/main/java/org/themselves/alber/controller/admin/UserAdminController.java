@@ -11,10 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.user.dto.UserDto;
 import org.themselves.alber.controller.user.dto.UserDtoByAdmin;
 import org.themselves.alber.controller.user.dto.UserJoinDto;
 import org.themselves.alber.controller.user.dto.UserUpdateDto;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.service.UserService;
 
 import javax.validation.Valid;
@@ -34,11 +36,7 @@ public class UserAdminController {
     @ApiOperation(value = "회원가입")
     public ResponseEntity<ResponseContent> joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
 
-        if (!userJoinDto.checkPassword())
-        throw new CustomException(StatusCode.PASSWORD_PASSWORDCHECK_ALONG);
-
-        User user = modelMapper.map(userJoinDto, User.class);
-        userService.joinUserAdmin(user);
+        userService.joinUser(userJoinDto, UserType.ADMIN);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -74,10 +72,7 @@ public class UserAdminController {
     @ApiOperation(value = "회원수정")
     public ResponseEntity<ResponseContent<UserDtoByAdmin>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
 
-        User user = modelMapper.map(userUpdateDto, User.class);
-        user.setId(id);
-
-        User updateUser = userService.updateUser(user);
+        User updateUser = userService.updateUserAdmin(userUpdateDto, id);
 
         UserDtoByAdmin userDto = modelMapper.map(updateUser, UserDtoByAdmin.class);
         return ResponseEntity

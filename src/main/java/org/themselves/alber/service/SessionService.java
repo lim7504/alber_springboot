@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.JwtTokenProvider;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.domain.Password;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.repository.UserRepository;
 
@@ -21,16 +22,14 @@ import java.util.Optional;
 public class SessionService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
     public User login(User user) {
-
         Optional<User> findUser = userRepository.findByEmail(user.getEmail());
-
         if (!findUser.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
-        if(!passwordEncoder.matches(user.getPassword(), findUser.get().getPassword()))
+        Password pwd = new Password();
+        if(!pwd.encodeMatches(user.getPassword(), findUser.get().getPassword()))
             throw new CustomException(StatusCode.PASSWORD_ALONG);
 
         return findUser.get();

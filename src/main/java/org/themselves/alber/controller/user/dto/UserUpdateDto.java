@@ -9,16 +9,12 @@ import javax.validation.constraints.NotEmpty;
 public class UserUpdateDto {
 
     private String nickname;
-
-    @Email @NotEmpty
-    private String email;
     private String password;
-    private String passwordCheck;
+//    private String passwordCheck;
 
-    public UserUpdateDto(String nickname, String email, String password, String passwordCheck) {
-        this.nickname = nickname;
-        this.email = email;
-        this.password = password;
-        this.passwordCheck = passwordCheck;
-    }
+//    public Boolean checkPassword() {
+//        if (!password.equals(passwordCheck))
+//            return false;
+//        return true;
+//    }
 }

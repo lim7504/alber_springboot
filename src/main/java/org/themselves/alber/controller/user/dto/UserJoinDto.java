@@ -17,14 +17,12 @@ public class UserJoinDto {
     @NotEmpty
     private String password;
 
-    @NotEmpty
-    private String passwordCheck;
-
-    public Boolean checkPassword() {
-
-        if (!password.equals(passwordCheck))
-            return false;
-
-        return true;
-    }
+//    @NotEmpty
+//    private String passwordCheck;
+//
+//    public Boolean checkPassword() {
+//        if (!password.equals(passwordCheck))
+//            return false;
+//        return true;
+//    }
 }

@@ -34,7 +34,6 @@ public class WastebasketCommentService {
 
     @Transactional
     public void setWastebasketComment(User user, Long comment_id, String contents) {
-
         Optional<WastebasketComment> wastebasketComment = wastebasketCommentRepository.findById(comment_id);
 
         if(!wastebasketComment.isPresent())

@@ -2,13 +2,17 @@ package org.themselves.alber.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.themselves.alber.controller.user.dto.UserUpdateDto;
 import org.themselves.alber.domain.common.BaseEntity;
 import org.themselves.alber.domain.common.UserSocialType;
 import org.themselves.alber.domain.common.UserStatus;
 import org.themselves.alber.domain.common.UserType;
+import org.themselves.alber.repository.UserRepository;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -52,7 +56,22 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Pin> userPinList = new ArrayList<>();
 
-    public void encodePassword(PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
+    public String encodePassword(String oriPwd) {
+        Password pwd = new Password();
+        return pwd.encodePassword(oriPwd);
+    }
+
+    public void joinUser(UserType userType) {
+        this.setSocialType(UserSocialType.None);
+        this.setLastLoginDate(LocalDateTime.now());
+        this.setStatus(UserStatus.ACTIVE);
+        this.setPassword(this.encodePassword(this.password));
+        this.setType(userType);
+    }
+
+    public void updateUser(UserUpdateDto userUpdateDto) {
+        this.setNickname(userUpdateDto.getNickname());
+        if (!userUpdateDto.getPassword().isEmpty())
+            this.setPassword(userUpdateDto.getPassword());
     }
 }

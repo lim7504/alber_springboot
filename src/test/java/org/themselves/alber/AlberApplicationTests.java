@@ -29,17 +29,17 @@ class AlberApplicationTests {
 	EntityManager em;
 
 
-	@Test
-	void testUser() throws Exception {
-
-		User user = new User();
-		user.setNickname("둘리");
-		user.setEmail("abcd@abcd");
-		user.setPassword("1234");
-		userService.joinUser(user);
-
-
-
-	}
+//	@Test
+//	void testUser() throws Exception {
+//
+//		User user = new User();
+//		user.setNickname("둘리");
+//		user.setEmail("abcd@abcd");
+//		user.setPassword("1234");
+//		userService.joinUser(user);
+//
+//
+//
+//	}
 
 }

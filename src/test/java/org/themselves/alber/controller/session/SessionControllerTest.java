@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Description;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.controller.session.dto.UserLoginDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "classpath:/application.yml" +
         ",classpath:/db.yml")
 @AutoConfigureMockMvc
+@Transactional
 class SessionControllerTest {
 
     @Autowired

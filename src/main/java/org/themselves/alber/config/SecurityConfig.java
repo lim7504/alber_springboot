@@ -29,8 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/","/hello").permitAll()
-                .mvcMatchers(HttpMethod.POST,"/users","/users/test","/session").permitAll()
+                .mvcMatchers("/","/hello","/users/nickname","/users/email").permitAll()
+                .mvcMatchers(HttpMethod.POST,"/admin/users"
+                                                         ,"/users"
+                                                         ,"/users/test"
+                                                         ,"/session").permitAll()
                 .mvcMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .anyRequest().authenticated();
