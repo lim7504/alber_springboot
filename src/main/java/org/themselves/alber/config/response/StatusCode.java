@@ -14,6 +14,7 @@ public enum StatusCode {
     PASSWORD_PASSWORDCHECK_ALONG("AC_005", "비밀번호와 비밀번호 확인이 같지 않습니다.", 400),
     PASSWORD_ALONG("AC_006", "비밀번호가 맞지 않습니다..", 400),
     DELETE_FAIL("AC_007", "삭제에 실패하였습니다.", 400),
+    PASSWORD_POLICY_ALONG("AC_008", "비밀번호와 정책과 맞지 않습니다.", 400),
 
     //Wastebasket
     WASTEBASKET_NOT_FOUND("WB_001", "해당 쓰레기통을 찾을 수 없습니다.", 400),

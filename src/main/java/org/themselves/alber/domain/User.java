@@ -7,6 +7,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.themselves.alber.config.response.CustomException;
+import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.user.dto.UserUpdateDto;
 import org.themselves.alber.domain.common.BaseEntity;
 import org.themselves.alber.domain.common.UserSocialType;
@@ -15,6 +17,7 @@ import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.UserRepository;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,16 +28,18 @@ import java.util.List;
 @ToString(of = {"id","nickname","email"})
 public class User extends BaseEntity {
 
-    @Id @GeneratedValue(strategy=GenerationType.TABLE, generator="SEQ_USER")
+    @Id
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "SEQ_USER")
     @Column(name = "user_id")
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String nickname;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String email;
 
+    @NotEmpty
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -52,26 +57,53 @@ public class User extends BaseEntity {
 
     private LocalDateTime exitedDate;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Pin> userPinList = new ArrayList<>();
 
-    public String encodePassword(String oriPwd) {
+    private void encodePassword() {
         Password pwd = new Password();
-        return pwd.encodePassword(oriPwd);
+        String tarPwd = pwd.encodePassword(this.password);
+        this.password = tarPwd;
     }
 
-    public void joinUser(UserType userType) {
-        this.setSocialType(UserSocialType.None);
-        this.setLastLoginDate(LocalDateTime.now());
-        this.setStatus(UserStatus.ACTIVE);
-        this.setPassword(this.encodePassword(this.password));
-        this.setType(userType);
+    public void joinCheckNSetting(UserType userType) {
+        this.checkPasswordPolicy();
+        this.encodePassword();
+
+        this.socialType = UserSocialType.None;
+        this.lastLoginDate = LocalDateTime.now();
+        this.status = UserStatus.ACTIVE;
+        this.type = userType;
     }
 
-    public void updateUser(UserUpdateDto userUpdateDto) {
-        this.setNickname(userUpdateDto.getNickname());
-        if (!userUpdateDto.getPassword().isEmpty())
-            this.setPassword(userUpdateDto.getPassword());
+//    public void updateCheckNSetting(UserUpdateDto userUpdateDto) {
+//        this.nickname = userUpdateDto.getNickname();
+//        if (!userUpdateDto.getPassword().isEmpty())
+//            this.password = userUpdateDto.getPassword();
+//    }
+
+    private void checkPasswordPolicy() {
+        Password pwd = new Password();
+        if (!pwd.CheckPasswordPolicy(this.password))
+            throw new CustomException(StatusCode.PASSWORD_POLICY_ALONG);
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+        this.checkPasswordPolicy();
+        this.encodePassword();
+    }
+
+    public void updateImage(Image image) {
+        this.image = image;
     }
 }

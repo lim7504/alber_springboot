@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootContextLoader;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.annotation.Rollback;
@@ -17,17 +18,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.JwtTokenProvider;
 import org.themselves.alber.controller.session.dto.UserLoginDto;
-import org.themselves.alber.controller.user.dto.UserEmailDto;
-import org.themselves.alber.controller.user.dto.UserJoinDto;
-import org.themselves.alber.controller.user.dto.UserNicknameDto;
-import org.themselves.alber.controller.user.dto.UserUpdateDto;
+import org.themselves.alber.controller.user.dto.*;
 import org.themselves.alber.domain.Password;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.service.SessionService;
+import org.themselves.alber.service.UserService;
 
 import javax.swing.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -62,10 +64,9 @@ class UserControllerTest {
     public void testJoinUser() throws Exception {
 
         UserJoinDto user = new UserJoinDto();
-
         user.setNickname("싱싱한쓰레기");
         user.setEmail("bbb@bbb");
-        user.setPassword("1234");
+        user.setPassword("1234abcd");
 
         mockMvc.perform(post("/users")
                 .contentType(String.valueOf(MediaType.JSON_UTF_8))
@@ -182,10 +183,61 @@ class UserControllerTest {
     }
 
     @Test
-    public void exitUser() {
+    public void testUpdateNickName() throws Exception{
+        Optional<User> optionalUser = userRepository.findByEmail("aaa@aaa");
+        String token = jwtTokenProvider.createToken(optionalUser.get().getEmail(), optionalUser.get().getType().name());
 
+        UserNicknameDto userNicknameDto = new UserNicknameDto();
+        userNicknameDto.setNickname("싱싱한쓰레기");
+
+        mockMvc.perform(put("/users/detail/nickname")
+                .contentType(String.valueOf(MediaType.JSON_UTF_8))
+                .accept(String.valueOf(MediaType.JSON_UTF_8))
+                .header("X-AUTH-TOKEN", token)
+                .content(objectMapper.writeValueAsString(userNicknameDto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        assertEquals("싱싱한쓰레기", userRepository.findByEmail("aaa@aaa").get().getNickname());
     }
 
+    @Test
+    public void testUpdatePassword() throws Exception{
+        Optional<User> optionalUser = userRepository.findByEmail("aaa@aaa2");
+        String token = jwtTokenProvider.createToken(optionalUser.get().getEmail(), optionalUser.get().getType().name());
+
+        UserPasswordDto userPasswordDto = new UserPasswordDto();
+        userPasswordDto.setPassword("1111aaaa");
+
+        mockMvc.perform(put("/users/detail/password")
+                .contentType(String.valueOf(MediaType.JSON_UTF_8))
+                .accept(String.valueOf(MediaType.JSON_UTF_8))
+                .header("X-AUTH-TOKEN", token)
+                .content(objectMapper.writeValueAsString(userPasswordDto)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    public void testUpdateImage() throws Exception {
+        Optional<User> optionalUser = userRepository.findByEmail("aaa@aaa2");
+        String token = jwtTokenProvider.createToken(optionalUser.get().getEmail(), optionalUser.get().getType().name());
+
+        Path path = Paths.get("image/wastebasket_1/7fd70c0ddf264079a95b3f69e8ec0e63.png");
+        String name = "file"; //이게 중요 이게 파라미터 이름임... 몇시간을 찾았네...
+        String originalFileName = "a.png";
+        String contentType = "image/png";
+        byte[] content = null;
+        content = Files.readAllBytes(path);
+
+        MockMultipartFile file = new MockMultipartFile(name, originalFileName, contentType, content);
+
+        mockMvc.perform(multipart("/users/detail/image")
+                .file(file)
+                .header("X-AUTH-TOKEN", token))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 }
 
 

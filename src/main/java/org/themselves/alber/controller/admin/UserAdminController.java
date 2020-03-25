@@ -68,17 +68,17 @@ public class UserAdminController {
                 .body( new ResponseContent<>(StatusCode.SUCCESS, userDtoList));
     }
 
-    @PutMapping(value = "/{id}", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
-    @ApiOperation(value = "회원수정")
-    public ResponseEntity<ResponseContent<UserDtoByAdmin>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
-
-        User updateUser = userService.updateUserAdmin(userUpdateDto, id);
-
-        UserDtoByAdmin userDto = modelMapper.map(updateUser, UserDtoByAdmin.class);
-        return ResponseEntity
-                .ok()
-                .body( new ResponseContent<>(StatusCode.SUCCESS, userDto));
-    }
+//    @PutMapping(value = "/{id}", consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+//    @ApiOperation(value = "회원수정")
+//    public ResponseEntity<ResponseContent<UserDtoByAdmin>> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateDto userUpdateDto) {
+//
+//        User updateUser = userService.updateUserAdmin(userUpdateDto, id);
+//
+//        UserDtoByAdmin userDto = modelMapper.map(updateUser, UserDtoByAdmin.class);
+//        return ResponseEntity
+//                .ok()
+//                .body( new ResponseContent<>(StatusCode.SUCCESS, userDto));
+//    }
 
     @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원삭제")

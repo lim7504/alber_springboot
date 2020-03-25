@@ -12,6 +12,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -39,4 +42,5 @@ public class AlberApplication {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 		return modelMapper;
 	}
+
 }
