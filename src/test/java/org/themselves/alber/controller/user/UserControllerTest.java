@@ -194,7 +194,7 @@ class UserControllerTest {
         UserNicknameDto userNicknameDto = new UserNicknameDto();
         userNicknameDto.setNickname("싱싱한쓰레기");
 
-        mockMvc.perform(put("/users/detail/nickname")
+        mockMvc.perform(patch("/users/detail/nickname")
                 .contentType(String.valueOf(MediaType.JSON_UTF_8))
                 .accept(String.valueOf(MediaType.JSON_UTF_8))
                 .header("X-AUTH-TOKEN", token)
@@ -213,7 +213,7 @@ class UserControllerTest {
         UserPasswordDto userPasswordDto = new UserPasswordDto();
         userPasswordDto.setPassword("1111aaaa");
 
-        mockMvc.perform(put("/users/detail/password")
+        mockMvc.perform(patch("/users/detail/password")
                 .contentType(String.valueOf(MediaType.JSON_UTF_8))
                 .accept(String.valueOf(MediaType.JSON_UTF_8))
                 .header("X-AUTH-TOKEN", token)

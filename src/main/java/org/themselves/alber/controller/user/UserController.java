@@ -1,5 +1,6 @@
 package org.themselves.alber.controller.user;
 
+import com.sun.corba.se.spi.legacy.interceptor.RequestInfoExt;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +99,7 @@ public class UserController {
                 .body(new ResponseContent<>(StatusCode.SUCCESS, isExist));
     }
 
-    @PutMapping(value = "/detail/nickname", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
+    @PatchMapping(value = "/detail/nickname", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "닉네임 변경")
     public ResponseEntity<ResponseContent> updateNickname(@RequestBody UserNicknameDto userNicknameDto, Principal principal) {
         userService.updateNickname(principal.getName(), userNicknameDto);
@@ -106,8 +107,7 @@ public class UserController {
                 .ok()
                 .body(new ResponseContent(StatusCode.SUCCESS));
     }
-
-    @PutMapping(value = "/detail/password", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
+    @PatchMapping(value = "/detail/password", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "패스워드 변경")
     public ResponseEntity<ResponseContent> updatePassword(@RequestBody UserPasswordDto userPasswordDto, Principal principal) {
         userService.updatePassword(principal.getName(), userPasswordDto);

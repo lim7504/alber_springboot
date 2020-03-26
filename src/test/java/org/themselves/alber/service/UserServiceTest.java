@@ -100,5 +100,4 @@ class UserServiceTest {
 
         assertEquals(11L, userService.getUserByEmail(email).getImage().getId());
     }
-
 }
