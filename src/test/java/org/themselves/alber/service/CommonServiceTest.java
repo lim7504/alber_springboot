@@ -1,5 +1,6 @@
 package org.themselves.alber.service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -28,6 +29,7 @@ class CommonServiceTest {
     CommonService commonService;
 
     @Test
+    @Disabled //image경로가 다르기 때문에 유닛 테스트 할때만 사용
     public void testAddImage() throws IOException{
 
         Path path = Paths.get("image/wastebasket_1/7fd70c0ddf264079a95b3f69e8ec0e63.png");
