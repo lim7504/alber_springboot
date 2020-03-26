@@ -16,7 +16,6 @@ import javax.persistence.EntityManager;
 @RunWith(SpringRunner.class)
 @SpringBootTest(properties = "spring.config.location=classpath:/application.yml,classpath:/db.yml")
 @Transactional
-@Rollback(false)
 class AlberApplicationTests {
 
 	@Autowired

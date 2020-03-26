@@ -1,5 +1,6 @@
 package org.themselves.alber.service;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,12 +38,12 @@ class UserServiceTest {
     @Test
     public void joinUser() {
         UserJoinDto userJoinDto = new UserJoinDto();
-        userJoinDto.setNickname("누룽지");
-        userJoinDto.setEmail("eee@eee");
+        userJoinDto.setNickname("마빡이");
+        userJoinDto.setEmail("rrr@rrr");
         userJoinDto.setPassword("1111aaaa");
         userService.joinUser(userJoinDto, UserType.ADMIN);
 
-        assertEquals("누룽지", userService.getUserByEmail("eee@eee").getNickname());
+        assertEquals("마빡이", userService.getUserByEmail("rrr@rrr").getNickname());
     }
 
     @Test
@@ -83,6 +84,7 @@ class UserServiceTest {
     }
 
     @Test
+    @Disabled //TODO 개발예정
     @Description("회원 탈퇴")
     public void testExitUser() {
         userService.exitUser("aaa@aaa2");
