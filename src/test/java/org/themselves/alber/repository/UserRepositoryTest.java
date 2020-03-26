@@ -1,5 +1,9 @@
 package org.themselves.alber.repository;
 
+import com.querydsl.core.QueryResults;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -8,11 +12,14 @@ import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
+import org.themselves.alber.domain.QUser;
 import org.themselves.alber.domain.User;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
@@ -25,6 +32,9 @@ class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
+    
+    @Autowired
+    EntityManager em;
 
     @Test
     @Description("JPQL")
@@ -71,5 +81,20 @@ class UserRepositoryTest {
         }
 
         //assertEquals("둘리", byEmail.get().getNickname());
+    }
+
+    @Test
+    @Description("QueryDSL")
+    public void testQueryDSL() {
+
+        JPAQueryFactory query = new JPAQueryFactory(em);
+        QUser qUser = new QUser("u");
+
+        User result = query
+                .selectFrom(qUser)
+                .where(qUser.email.eq("aaa@aaa"))
+                .fetchOne();
+
+        assertThat(result.getNickname()).isEqualTo("둘리");
     }
 }

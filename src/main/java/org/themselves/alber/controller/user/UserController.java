@@ -1,6 +1,5 @@
 package org.themselves.alber.controller.user;
 
-import com.sun.corba.se.spi.legacy.interceptor.RequestInfoExt;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
