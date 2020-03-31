@@ -61,6 +61,9 @@ public class User extends BaseEntity {
     @JoinColumn(name = "image_id")
     private Image image;
 
+    @JoinColumn(name = "grade")
+    private String grade;
+
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Pin> userPinList = new ArrayList<>();

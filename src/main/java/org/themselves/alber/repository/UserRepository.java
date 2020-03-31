@@ -1,11 +1,10 @@
 package org.themselves.alber.repository;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.repository.projection.UserProjection;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,8 +21,23 @@ public interface UserRepository extends JpaRepository<User,Long> {
     //FETCH 조인은 where 를  쓰면 안된다 그로므로 알리야스도 쓰지 않는다
     //알리야스를 쓰는경우가 있는데 중첩으로 fetch join 을 사용할 때 쓴다.
     //일대다는 fetch Join 하지 않는다
-    @Query("select u from User u join fetch u.image where u.email = :email")
+    @Query("select u from User u left join fetch u.image where u.email = :email")
      User findByUserJPQL(@Param("email") String email);
+
+    @Query("select u " +
+            "from User u " +
+            "left join fetch u.image " +
+            "left join fetch u.userPinList " +
+            "where u.email = :email")
+    User findByUserJPQL2(@Param("email") String email);
+
+    @Query("select u " +
+            "from User u " +
+            "left join fetch u.image " +
+            "left join fetch u.userPinList " +
+            "where u.email = :email")
+    User findByUserJPQL3(@Param("email") String email);
+
 
     //NativeQuery
     @Query(value = "select u.nickname" +
@@ -52,4 +66,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "         join image i" +
             "           on u.image_id = i.image_id", nativeQuery = true)
     List<UserProjection> findByNativeQuery3();
+
 }

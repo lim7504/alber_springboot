@@ -1,26 +1,20 @@
 package org.themselves.alber.repository;
 
-import com.querydsl.core.QueryResults;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.domain.QUser;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.repository.projection.UserProjection;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
         ,properties = "spring.config.location=" +
@@ -41,10 +35,30 @@ class UserRepositoryTest {
     public void testFindByEmail() {
         User user = new User();
         user.setEmail("eee@eee");
-        User byEmail = userRepository.findByUserJPQL(user.getEmail());
-        System.out.println(byEmail.getImage().getUrl());
-        //assertEquals("둘리", byEmail.get().getNickname());
+        User findUser = userRepository.findByUserJPQL(user.getEmail());
+        if(findUser.getImage() != null)
+            System.out.println(findUser.getImage().getUrl());
+        System.out.println(findUser.getEmail());
+        System.out.println(findUser.getNickname());
+        System.out.println(findUser.getGrade());
+
     }
+
+    @Test
+    @Description("JPQL")
+    public void testFindByEmail2() {
+        User user = new User();
+        user.setEmail("aaa@aaa");
+        User findUser = userRepository.findByUserJPQL2(user.getEmail());
+        if(findUser.getImage() != null)
+            System.out.println(findUser.getImage().getUrl());
+        System.out.println(findUser.getEmail());
+        System.out.println(findUser.getNickname());
+        System.out.println(findUser.getGrade());
+        System.out.println(findUser.getUserPinList().size());
+
+    }
+
 
 
     @Test
@@ -96,5 +110,17 @@ class UserRepositoryTest {
                 .fetchOne();
 
         assertThat(result.getNickname()).isEqualTo("둘리");
+    }
+
+    @Test
+    @Description("마이페이지-프로필이미지,이메일,닉네임,등급")
+    public void testMyPagePart1() {
+        User user = new User();
+        user.setEmail("eee@eee");
+        User findUser = userRepository.findByUserJPQL(user.getEmail());
+        System.out.println(findUser.getImage().getUrl());
+
+        //assertEquals("둘리", byEmail.get().getNickname());
+
     }
 }
