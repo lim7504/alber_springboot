@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
     //알리야스를 쓰는경우가 있는데 중첩으로 fetch join 을 사용할 때 쓴다.
     //일대다는 fetch Join 하지 않는다
     @Query("select u from User u left join fetch u.image where u.email = :email")
-     User findByUserJPQL(@Param("email") String email);
+     User findByUserAndImageUrl(@Param("email") String email);
 
     @Query("select u " +
             "from User u " +

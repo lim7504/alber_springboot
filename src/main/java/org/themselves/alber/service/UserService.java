@@ -8,18 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.user.dto.UserJoinDto;
-import org.themselves.alber.controller.user.dto.UserNicknameDto;
-import org.themselves.alber.controller.user.dto.UserPasswordDto;
-import org.themselves.alber.controller.user.dto.UserUpdateDto;
+import org.themselves.alber.controller.user.dto.*;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.User;
-import org.themselves.alber.domain.common.UserStatus;
 import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.ImageRepository;
 import org.themselves.alber.repository.UserRepository;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -146,5 +141,21 @@ public class UserService {
         Optional<Image> image = imageRepository.findById(image_id);
 
         user.get().updateImage(image.get());
+    }
+
+    public UserMyPageDto getUserForMyPage(String email) {
+        User findUser = userRepository.findByUserAndImageUrl(email);
+        UserMyPageDto userDto = modelMapper.map(findUser, UserMyPageDto.class);
+        if(findUser.getImage() != null)
+            userDto.setUrl(findUser.getImage().getUrl());
+        return userDto;
+    }
+
+    public UserResponseDto getUser(String email) {
+        User findUser = userRepository.findByUserAndImageUrl(email);
+        UserResponseDto userDto = modelMapper.map(findUser, UserResponseDto.class);
+        if(findUser.getImage() != null)
+            userDto.setUrl(findUser.getImage().getUrl());
+        return userDto;
     }
 }

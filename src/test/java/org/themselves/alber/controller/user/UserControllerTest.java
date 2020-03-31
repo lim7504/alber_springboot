@@ -117,6 +117,21 @@ class UserControllerTest {
     }
 
     @Test
+    public void testGetUserForMyPage() throws Exception{
+        Optional<User> optionalUser = userRepository.findByNickname("둘리");
+        String token = jwtTokenProvider.createToken(optionalUser.get().getEmail(), optionalUser.get().getType().name());
+
+        mockMvc.perform(get("/users/mypage")
+                .accept(String.valueOf(MediaType.JSON_UTF_8))
+                .header("X-AUTH-TOKEN", token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("data.email").value("aaa@aaa"))
+                .andExpect(jsonPath("data.nickname").value("둘리"))
+                .andExpect(jsonPath("data.grade").value("노오력시민"))
+                .andDo(print());
+    }
+
+    @Test
     public void testDuplicationCheckNickName() throws Exception {
         UserNicknameDto userNicknameDto = new UserNicknameDto();
         userNicknameDto.setNickname("둘리");

@@ -8,10 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.common.dto.ImageDto;
 import org.themselves.alber.controller.user.dto.*;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
@@ -45,15 +43,24 @@ public class UserController {
 
     @GetMapping(value = "/detail", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원상세조회")
-    public ResponseEntity<ResponseContent<UserDto>> getUserOne(Principal principal) {
+    public ResponseEntity<ResponseContent<UserResponseDto>> getUserOne(Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
-        UserDto userDto = modelMapper.map(user, UserDto.class);
+        UserResponseDto userDto = modelMapper.map(user, UserResponseDto.class);
 
         return ResponseEntity
                 .ok()
                 .body(new ResponseContent<>(StatusCode.SUCCESS, userDto));
     }
 
+    @GetMapping(value = "/mypage", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
+    @ApiOperation(value = "마이페이지")
+    public ResponseEntity<ResponseContent<UserMyPageDto>> getUserForMyPage(Principal principal) {
+        UserMyPageDto userDto = userService.getUserForMyPage(principal.getName());
+
+        return ResponseEntity
+                .ok()
+                .body(new ResponseContent<>(StatusCode.SUCCESS, userDto));
+    }
 
 //    @PutMapping(value = "/detail", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
 //    @ApiOperation(value = "회원수정")
@@ -70,7 +77,7 @@ public class UserController {
 
     @DeleteMapping(value = "/detail", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원탈퇴")
-    public ResponseEntity<ResponseContent<UserDto>> deleteUser(Principal principal) {
+    public ResponseEntity<ResponseContent<UserResponseDto>> deleteUser(Principal principal) {
         userService.exitUser(principal.getName());
 
         return ResponseEntity

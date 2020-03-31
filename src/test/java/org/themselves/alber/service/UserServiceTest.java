@@ -6,13 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Description;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
-import org.themselves.alber.controller.user.dto.UserJoinDto;
-import org.themselves.alber.controller.user.dto.UserNicknameDto;
-import org.themselves.alber.controller.user.dto.UserPasswordDto;
-import org.themselves.alber.domain.Image;
+import org.themselves.alber.controller.user.dto.*;
 import org.themselves.alber.domain.Password;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
@@ -45,6 +41,34 @@ class UserServiceTest {
 
         assertEquals("마빡이", userService.getUserByEmail("rrr@rrr").getNickname());
     }
+
+    @Test
+    public void testGetUserDetail() {
+        User user = new User();
+        user.setEmail("eee@eee");
+
+        UserResponseDto userDto = userService.getUser(user.getEmail());
+
+        assertEquals("eee@eee", userDto.getEmail());
+        assertEquals("누룽지", userDto.getNickname());
+        assertNotNull(userDto.getUrl());
+    }
+
+
+    @Test
+    public void testGetUserForMyPage() {
+        User user = new User();
+        user.setEmail("eee@eee");
+
+        UserMyPageDto userDto = userService.getUserForMyPage(user.getEmail());
+
+        assertEquals("eee@eee", userDto.getEmail());
+        assertEquals("누룽지", userDto.getNickname());
+        assertEquals("평범한시민", userDto.getGrade());
+        assertNotNull(userDto.getUrl());
+    }
+
+
 
     @Test
     public void testExistUserNickname() {
@@ -100,4 +124,5 @@ class UserServiceTest {
 
         assertEquals(11L, userService.getUserByEmail(email).getImage().getId());
     }
+
 }

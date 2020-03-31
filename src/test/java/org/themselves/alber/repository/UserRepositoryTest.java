@@ -30,12 +30,13 @@ class UserRepositoryTest {
     @Autowired
     EntityManager em;
 
+
     @Test
     @Description("JPQL")
     public void testFindByEmail() {
         User user = new User();
         user.setEmail("eee@eee");
-        User findUser = userRepository.findByUserJPQL(user.getEmail());
+        User findUser = userRepository.findByUserAndImageUrl(user.getEmail());
         if(findUser.getImage() != null)
             System.out.println(findUser.getImage().getUrl());
         System.out.println(findUser.getEmail());
@@ -117,7 +118,7 @@ class UserRepositoryTest {
     public void testMyPagePart1() {
         User user = new User();
         user.setEmail("eee@eee");
-        User findUser = userRepository.findByUserJPQL(user.getEmail());
+        User findUser = userRepository.findByUserAndImageUrl(user.getEmail());
         System.out.println(findUser.getImage().getUrl());
 
         //assertEquals("둘리", byEmail.get().getNickname());
