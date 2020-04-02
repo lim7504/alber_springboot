@@ -13,6 +13,7 @@ import org.themselves.alber.repository.projection.UserProjection;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,9 +49,9 @@ class UserRepositoryTest {
     @Test
     @Description("JPQL")
     public void testFindByEmail2() {
-        User user = new User();
-        user.setEmail("aaa@aaa");
-        User findUser = userRepository.findByUserAndImageUrlAndPinList(user.getId());
+
+        Optional<User> user = userRepository.findByEmail("aaa@aaa");
+        User findUser = userRepository.findByUserAndImageUrlAndPinList(user.get().getId());
         if(findUser.getImage() != null)
             System.out.println(findUser.getImage().getUrl());
         System.out.println(findUser.getEmail());
