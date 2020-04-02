@@ -9,12 +9,17 @@ import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.user.dto.*;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.ImageRepository;
 import org.themselves.alber.repository.UserRepository;
+import org.themselves.alber.repository.WastebasketCommentRepository;
+import org.themselves.alber.repository.projection.MyPageProjection;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
+    private final WastebasketCommentRepository wastebasketCommentRepository;
 
     @Transactional
     public void joinUser(UserJoinDto userJoinDto, UserType userType) {
@@ -143,11 +149,24 @@ public class UserService {
         user.get().updateImage(image.get());
     }
 
-    public UserMyPageDto getUserForMyPage(String email) {
-        User findUser = userRepository.findByUserAndImageUrl(email);
+    public UserMyPageDto getUserForMyPage(User user) {
+        User findUser = userRepository.findByUserAndImageUrlAndPinList(user.getId());
         UserMyPageDto userDto = modelMapper.map(findUser, UserMyPageDto.class);
+        userDto.setPinCnt(findUser.getUserPinList().size());
         if(findUser.getImage() != null)
             userDto.setUrl(findUser.getImage().getUrl());
+
+        List<MyPageProjection> myPageProjectionList = wastebasketCommentRepository.findByUser(user.getId());
+        for (MyPageProjection myPageProjection : myPageProjectionList) {
+            WastebasketCommentNImageDto commentNImageDto = new WastebasketCommentNImageDto();
+            commentNImageDto.setContents(myPageProjection.getContents().toString());
+            commentNImageDto.setBoxName(myPageProjection.getBox_Name().toString());
+            commentNImageDto.setAreaSi(myPageProjection.getArea_Si().toString());
+            commentNImageDto.setImage(myPageProjection.getUrl().toString());
+            userDto.getComment().add(commentNImageDto);
+        }
+
+
         return userDto;
     }
 

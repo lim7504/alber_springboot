@@ -50,7 +50,7 @@ class UserRepositoryTest {
     public void testFindByEmail2() {
         User user = new User();
         user.setEmail("aaa@aaa");
-        User findUser = userRepository.findByUserJPQL2(user.getEmail());
+        User findUser = userRepository.findByUserAndImageUrlAndPinList(user.getId());
         if(findUser.getImage() != null)
             System.out.println(findUser.getImage().getUrl());
         System.out.println(findUser.getEmail());

@@ -13,6 +13,7 @@ import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketComment
 import org.themselves.alber.domain.User;
 import org.themselves.alber.service.UserService;
 import org.themselves.alber.service.WastebasketCommentService;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.List;
@@ -28,6 +29,7 @@ public class WastebasketCommentController {
 
     @GetMapping(value = "/mypage", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "마이페이지")
+    @ApiIgnore
     public ResponseEntity<ResponseContent<List<WastebasketCommentNImageDto>>> getMyPage(Principal principal) {
         User user = userService.getUserByEmail(principal.getName());
         List<WastebasketCommentNImageDto> commentListByUser = wastebasketCommentService.getWastebasketCommentListByUser(user);

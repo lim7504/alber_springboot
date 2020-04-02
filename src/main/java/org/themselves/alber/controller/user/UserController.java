@@ -55,7 +55,8 @@ public class UserController {
     @GetMapping(value = "/mypage", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "마이페이지")
     public ResponseEntity<ResponseContent<UserMyPageDto>> getUserForMyPage(Principal principal) {
-        UserMyPageDto userDto = userService.getUserForMyPage(principal.getName());
+        User user = userService.getUserByEmail(principal.getName());
+        UserMyPageDto userDto = userService.getUserForMyPage(user);
 
         return ResponseEntity
                 .ok()

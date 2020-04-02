@@ -57,10 +57,16 @@ class UserServiceTest {
 
     @Test
     public void testGetUserForMyPage() {
-        User user = new User();
-        user.setEmail("eee@eee");
+        User user = userService.getUserByEmail("aaa@aaa");
+        UserMyPageDto userDto = userService.getUserForMyPage(user);
 
-        UserMyPageDto userDto = userService.getUserForMyPage(user.getEmail());
+        assertEquals("aaa@aaa", userDto.getEmail());
+        assertEquals("둘리", userDto.getNickname());
+        assertEquals("노오력시민", userDto.getGrade());
+        assertNull(userDto.getUrl());
+
+        user = userService.getUserByEmail("eee@eee");
+        userDto = userService.getUserForMyPage(user);
 
         assertEquals("eee@eee", userDto.getEmail());
         assertEquals("누룽지", userDto.getNickname());

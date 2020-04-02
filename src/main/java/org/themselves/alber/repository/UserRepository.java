@@ -21,15 +21,18 @@ public interface UserRepository extends JpaRepository<User,Long> {
     //FETCH 조인은 where 를  쓰면 안된다 그로므로 알리야스도 쓰지 않는다
     //알리야스를 쓰는경우가 있는데 중첩으로 fetch join 을 사용할 때 쓴다.
     //일대다는 fetch Join 하지 않는다
-    @Query("select u from User u left join fetch u.image where u.email = :email")
+    @Query("select u " +
+            "from User u " +
+            "left join fetch u.image " +
+            "where u.email = :email")
      User findByUserAndImageUrl(@Param("email") String email);
 
     @Query("select u " +
             "from User u " +
             "left join fetch u.image " +
             "left join fetch u.userPinList " +
-            "where u.email = :email")
-    User findByUserJPQL2(@Param("email") String email);
+            "where u.id = :id")
+    User findByUserAndImageUrlAndPinList(@Param("id") Long id);
 
     @Query("select u " +
             "from User u " +
