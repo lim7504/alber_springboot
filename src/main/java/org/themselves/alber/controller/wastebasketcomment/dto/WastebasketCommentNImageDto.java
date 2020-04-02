@@ -13,16 +13,6 @@ public class WastebasketCommentNImageDto {
     public WastebasketCommentNImageDto() {
     }
 
-    public WastebasketCommentNImageDto(String contents) {
-        this.contents = contents;
-    }
-
-    public WastebasketCommentNImageDto(String contents, String boxName, String areaSi, String image) {
-        this.contents = contents;
-        this.boxName = boxName;
-        this.areaSi = areaSi;
-        this.image = image;
-    }
 
     @Override
     public String toString() {

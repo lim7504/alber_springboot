@@ -2,19 +2,22 @@ package org.themselves.alber.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
-import org.themselves.alber.domain.User;
-import org.themselves.alber.domain.WastebasketComment;
+import org.themselves.alber.domain.*;
 import org.themselves.alber.repository.projection.MyPageProjection;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.querydsl.jpa.JPAExpressions.select;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
         ,properties = "spring.config.location=" +
@@ -35,6 +38,9 @@ class WastebasketCommentRepositoryTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    EntityManager em;
 
 //    @Test
 //    public void testWastebasketComment() {
@@ -82,10 +88,9 @@ class WastebasketCommentRepositoryTest {
     @Test
     public void testWastebasketComment3() throws JsonProcessingException {
 
+        List<WastebasketCommentNImageDto> dtoList = new ArrayList<>();
         Optional<User> user = userRepository.findByEmail("aaa@aaa");
-        List<WastebasketComment> commentList = wastebasketCommentRepository.findByUserQueryDSL(user.get());
-
-        System.out.println(objectMapper.writeValueAsString(commentList));
-
+        List<WastebasketCommentNImageDto> commentList = wastebasketCommentRepository.findByUserComment(user.get());
     }
+
 }

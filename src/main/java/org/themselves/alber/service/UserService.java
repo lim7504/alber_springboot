@@ -156,15 +156,20 @@ public class UserService {
         if(findUser.getImage() != null)
             userDto.setUrl(findUser.getImage().getUrl());
 
-        List<MyPageProjection> myPageProjectionList = wastebasketCommentRepository.findByUser(user.getId());
-        for (MyPageProjection myPageProjection : myPageProjectionList) {
-            WastebasketCommentNImageDto commentNImageDto = new WastebasketCommentNImageDto();
-            commentNImageDto.setContents(myPageProjection.getContents().toString());
-            commentNImageDto.setBoxName(myPageProjection.getBox_Name().toString());
-            commentNImageDto.setAreaSi(myPageProjection.getArea_Si().toString());
-            commentNImageDto.setImage(myPageProjection.getUrl().toString());
-            userDto.getComment().add(commentNImageDto);
+        List<WastebasketCommentNImageDto> commentList = wastebasketCommentRepository.findByUserComment(user);
+        for (WastebasketCommentNImageDto commentDto : commentList) {
+            userDto.getComment().add(commentDto);
         }
+
+//        List<MyPageProjection> myPageProjectionList = wastebasketCommentRepository.findByUser(user.getId());
+//        for (MyPageProjection myPageProjection : myPageProjectionList) {
+//            WastebasketCommentNImageDto commentNImageDto = new WastebasketCommentNImageDto();
+//            commentNImageDto.setContents(myPageProjection.getContents().toString());
+//            commentNImageDto.setBoxName(myPageProjection.getBox_Name().toString());
+//            commentNImageDto.setAreaSi(myPageProjection.getArea_Si().toString());
+//            commentNImageDto.setImage(myPageProjection.getUrl().toString());
+//            userDto.getComment().add(commentNImageDto);
+//        }
 
 
         return userDto;

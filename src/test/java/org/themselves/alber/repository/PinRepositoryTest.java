@@ -4,9 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import org.themselves.alber.domain.Pin;
 import org.themselves.alber.domain.User;
-import org.themselves.alber.domain.Wastebasket;
 import org.themselves.alber.service.UserService;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,11 +18,23 @@ import static org.junit.jupiter.api.Assertions.*;
         "classpath:/application.yml" +
         ",classpath:/db.yml")
 @AutoConfigureMockMvc
-class WastebasketRepositoryTest {
+@Transactional
+class PinRepositoryTest {
 
     @Autowired
-    WastebasketRepository wastebasketRepository;
+    UserService userService;
 
+    @Autowired
+    PinRepository pinRepository;
+    
+    @Test
+    public void testGetRegistWastebasketByUser() {
+        User user = userService.getUserByEmail("aaa@aaa");
+        List<Pin> pinList = pinRepository.findByUser(user);
 
+        for (Pin pin : pinList) {
+            System.out.println("pin.getWastebasket().getBoxName() = " + pin.getWastebasket().getBoxName());
+        }
 
+    }
 }
