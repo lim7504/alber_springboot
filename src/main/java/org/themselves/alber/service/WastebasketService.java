@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.wastebasket.dto.WastebasketForMyRegistWastebasketDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistWastebasketDto;
 import org.themselves.alber.domain.*;
 import org.themselves.alber.domain.common.GarType;
 import org.themselves.alber.repository.ImageRepository;
@@ -21,6 +23,7 @@ import org.themselves.alber.util.S3Uploader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,9 +70,9 @@ public class WastebasketService {
             wi.setImage(op_image.get());
             wi.setWastebasket(newWastebaseket);
             wastebasketImageRepository.save(wi);
+
+            newWastebaseket.setImage(op_image.get());
         }
-
-
     }
 
 
@@ -118,18 +121,10 @@ public class WastebasketService {
             wi.setImage(op_image.get());
             wi.setWastebasket(updateWastebasket.get());
             wastebasketImageRepository.save(wi);
+
+            updateWastebasket.get().setImage(op_image.get());
         }
-
-
     }
-
-
-
-
-
-
-
-
 
     @Transactional
     public void delWastebasket(Long id, User user) {
@@ -160,4 +155,35 @@ public class WastebasketService {
         //쓰레기통삭제
         wastebasketRepository.delete(wastebasket.get());
     }
+
+    public List<WastebasketForMyRegistWastebasketDto> getPinByUserForMyRegist(User user) {
+        List<WastebasketForMyRegistWastebasketDto> wastebasketDtoList = new ArrayList<>();
+        List<Pin> pinList = wastebasketRepository.findByUserForMyRegistWastebasket(user);
+
+        for (Pin pin : pinList) {
+            Wastebasket wastebasket = pin.getWastebasket();
+            WastebasketForMyRegistWastebasketDto wastebasketDto = new WastebasketForMyRegistWastebasketDto();
+            wastebasketDto.setId(wastebasket.getId());
+            wastebasketDto.setBoxName(wastebasket.getBoxName());
+            wastebasketDto.setAreaSi(wastebasket.getAreaSi());
+            wastebasketDto.setCreatedDate(wastebasket.getCreatedDate());
+            if (wastebasket.getImage() != null)
+                wastebasketDto.setImage(wastebasket.getImage().getUrl());
+            wastebasketDto.setCommentCnt(wastebasket.getWastebasketCommentList().size());
+
+            for (WastebasketComment wastebasketComment : wastebasket.getWastebasketCommentList()) {
+                WastebasketCommentForMyRegistWastebasketDto commentDto = new WastebasketCommentForMyRegistWastebasketDto();
+                commentDto.setId(wastebasketComment.getId());
+                commentDto.setContents(wastebasketComment.getContents());
+                commentDto.setCreatedDate(wastebasketComment.getCreatedDate());
+                commentDto.setNickname(wastebasketComment.getUser().getNickname());
+                if(wastebasketComment.getUser().getImage() != null)
+                    commentDto.setImage(wastebasketComment.getUser().getImage().getUrl());
+                wastebasketDto.getCommentDtoList().add(commentDto);
+            }
+            wastebasketDtoList.add(wastebasketDto);
+        }
+        return  wastebasketDtoList;
+    }
+
 }

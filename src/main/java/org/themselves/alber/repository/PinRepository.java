@@ -12,12 +12,12 @@ import java.util.Optional;
 
 public interface PinRepository extends JpaRepository<Pin, Long> {
 
-    @Query("select p from Pin p where p.wastebasket = :wastebasketId")
-    Optional<Pin> findByWastebasket(@Param("wastebasketId") Long wastebasketId);
-
-    @Query("select p " +
-            "from Pin p " +
-            "join fetch p.wastebasket w " +
-            "where p.user = :user ")
-    List<Pin> findByUser(@Param("user") User user);
+//    @Query("select p from Pin p where p.wastebasket = :wastebasketId")
+//    Optional<Pin> findByWastebasket(@Param("wastebasketId") Long wastebasketId);
+//
+//    @Query("select p " +
+//            "from Pin p " +
+//            "join fetch p.wastebasket w " +
+//            "where p.user = :user ")
+//    List<Pin> findByUser(@Param("user") User user);
 }

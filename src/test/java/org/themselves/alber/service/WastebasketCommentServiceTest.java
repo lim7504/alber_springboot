@@ -4,9 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.domain.Wastebasket;
 import org.themselves.alber.repository.UserRepository;
 
 import java.util.List;
@@ -26,14 +28,26 @@ class WastebasketCommentServiceTest {
     WastebasketCommentService wastebasketCommentService;
 
     @Autowired
-    UserRepository userRepository;
+    WastebasketService wastebasketService;
+
+    @Autowired
+    UserService userService;
 
     @Test
-    public void testGetWasteBasketComment() {
-        Optional<User> user = userRepository.findByEmail("aaa@aaa");
-        List<WastebasketCommentNImageDto> commentNImageDtoList
-                = wastebasketCommentService.getWastebasketCommentListByUser(user.get());
-
-        assertEquals(3, commentNImageDtoList.size());
+    @Rollback(false)
+    public void testAddComment() {
+        User user = userService.getUserByEmail("aaa@aaa");
+        Wastebasket wastebasket = wastebasketService.getWastebasketOne(105L);
+        wastebasketCommentService.addWastebasketComment(wastebasket,user,"pppp");
     }
+
+
+//    @Test
+//    public void testGetWasteBasketComment() {
+//        User user = userService.getUserByEmail("aaa@aaa");
+//        List<WastebasketCommentForMyRegistCommentDto> commentNImageDtoList
+//                = wastebasketCommentService.getWastebasketCommentListByUser(user);
+//
+//        assertEquals(3, commentNImageDtoList.size());
+//    }
 }

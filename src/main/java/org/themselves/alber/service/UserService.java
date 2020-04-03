@@ -9,16 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.user.dto.*;
-import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.ImageRepository;
 import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.repository.WastebasketCommentRepository;
-import org.themselves.alber.repository.projection.MyPageProjection;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -156,8 +154,8 @@ public class UserService {
         if(findUser.getImage() != null)
             userDto.setUrl(findUser.getImage().getUrl());
 
-        List<WastebasketCommentNImageDto> commentList = wastebasketCommentRepository.findByUserComment(user);
-        for (WastebasketCommentNImageDto commentDto : commentList) {
+        List<WastebasketCommentForMyRegistCommentDto> commentList = wastebasketCommentRepository.findByUserForMyRegistComment(user);
+        for (WastebasketCommentForMyRegistCommentDto commentDto : commentList) {
             userDto.getComment().add(commentDto);
         }
 

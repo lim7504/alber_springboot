@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class UserMyPageDto {
+public class UserMyWastebasketDto {
 
     private String nickname;
     private String email;
     private String grade;
-    private int pinCnt;
+    private int wastebasketCnt;
     private String url;
 
     private List<WastebasketCommentForMyRegistCommentDto> comment = new ArrayList<>();

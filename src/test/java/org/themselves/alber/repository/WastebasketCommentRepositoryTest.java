@@ -1,23 +1,32 @@
 package org.themselves.alber.repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
+import org.themselves.alber.controller.wastebasket.dto.WastebasketForMyRegistWastebasketDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.*;
 import org.themselves.alber.repository.projection.MyPageProjection;
+import org.themselves.alber.service.UserService;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.querydsl.jpa.JPAExpressions.select;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.themselves.alber.domain.QImage.image;
+import static org.themselves.alber.domain.QPin.pin;
+import static org.themselves.alber.domain.QUser.user;
+import static org.themselves.alber.domain.QWastebasket.wastebasket;
+import static org.themselves.alber.domain.QWastebasketComment.wastebasketComment;
+import static org.themselves.alber.domain.QWastebasketImage.wastebasketImage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
         ,properties = "spring.config.location=" +
@@ -31,7 +40,10 @@ class WastebasketCommentRepositoryTest {
     WastebasketCommentRepository wastebasketCommentRepository;
 
     @Autowired
-    UserRepository userRepository;
+    WastebasketRepository wastebasketRepository;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     WastebasketImageRepository wastebasketImageRepository;
@@ -41,6 +53,19 @@ class WastebasketCommentRepositoryTest {
 
     @Autowired
     EntityManager em;
+
+    @Test
+    @Rollback(false)
+    public void testAddComment() {
+        User user = userService.getUserByEmail("aaa@aaa");
+        Optional<Wastebasket> wastebasket = wastebasketRepository.findById(105L);
+        WastebasketComment wc = new WastebasketComment();
+        wc.setWastebasket(wastebasket.get());
+        wc.setUser(user);
+        wc.setContents("111111111");
+
+        wastebasketCommentRepository.save(wc);
+    }
 
 //    @Test
 //    public void testWastebasketComment() {
@@ -67,30 +92,52 @@ class WastebasketCommentRepositoryTest {
 
     @Test
     public void testWastebasketComment2() {
-        List<WastebasketCommentNImageDto> commentNImageDtoList = new ArrayList<>();
-        Optional<User> user = userRepository.findByEmail("aaa@aaa");
-        List<MyPageProjection> commentList = wastebasketCommentRepository.findByUser(user.get().getId());
+        List<WastebasketCommentForMyRegistCommentDto> commentNImageDtoList = new ArrayList<>();
+        User user = userService.getUserByEmail("aaa@aaa");
+        List<MyPageProjection> commentList = wastebasketCommentRepository.findByUser(user.getId());
         for (MyPageProjection comment : commentList) {
 
-            WastebasketCommentNImageDto commentNImageDto = new WastebasketCommentNImageDto();
+            WastebasketCommentForMyRegistCommentDto commentNImageDto = new WastebasketCommentForMyRegistCommentDto();
             commentNImageDto.setContents(comment.getContents().toString());
             commentNImageDto.setBoxName(comment.getBox_Name().toString());
             commentNImageDto.setAreaSi(comment.getArea_Si().toString());
-            commentNImageDto.setImage(comment.getUrl().toString());
+            if (comment.getUrl() != null)
+                commentNImageDto.setImage(comment.getUrl().toString());
             commentNImageDtoList.add(commentNImageDto);
         }
 
-        for (WastebasketCommentNImageDto commentNImageDto : commentNImageDtoList) {
+        for (WastebasketCommentForMyRegistCommentDto commentNImageDto : commentNImageDtoList) {
             System.out.println("wastebasketCommentNImageDto = " + commentNImageDto);
         }
     }
 
     @Test
-    public void testWastebasketComment3() throws JsonProcessingException {
+    public void testWastebasketComment3() throws Exception {
+        User user = userService.getUserByEmail("aaa@aaa");
+        List<WastebasketCommentForMyRegistCommentDto> commentList = wastebasketCommentRepository.findByUserForMyRegistComment(user);
+        assertNotNull(commentList);
+    }
 
-        List<WastebasketCommentNImageDto> dtoList = new ArrayList<>();
-        Optional<User> user = userRepository.findByEmail("aaa@aaa");
-        List<WastebasketCommentNImageDto> commentList = wastebasketCommentRepository.findByUserComment(user.get());
+    @Test
+    public void testWastebasketCommentForMyRegistWastebasket() {
+        Set<Long> wastebasketIdList = new HashSet<>();
+        User findUser = userService.getUserByEmail("aaa@aaa");
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        QImage wastebasketImage = new QImage("wastebasketImage");
+        QImage userImage = new QImage("userImage");
+
+        List<Pin> result = query
+                .selectDistinct(pin)
+                .from(pin)
+                .innerJoin(pin.wastebasket, wastebasket).fetchJoin()
+                .leftJoin(wastebasket.image, wastebasketImage).fetchJoin()
+                .leftJoin(wastebasket.wastebasketCommentList, wastebasketComment).fetchJoin()
+                .leftJoin(wastebasketComment.user, user).fetchJoin()
+                .leftJoin(user.image, userImage).fetchJoin()
+                .where(pin.user.eq(findUser))
+                .orderBy(wastebasket.createdDate.desc())
+                .fetch();
     }
 
 }

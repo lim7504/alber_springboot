@@ -30,7 +30,7 @@ public class SessionController {
 
     @PostMapping(consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "로그인")
-    private ResponseEntity login(@RequestBody UserLoginDto userLoginDto , HttpServletResponse response) {
+    private ResponseEntity<ResponseContent> login(@RequestBody UserLoginDto userLoginDto , HttpServletResponse response) {
 
         User user = modelMapper.map(userLoginDto, User.class);
 
@@ -53,7 +53,7 @@ public class SessionController {
 
     @DeleteMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "로그아웃")
-    private ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    private ResponseEntity<ResponseContent> logout(HttpServletRequest request, HttpServletResponse response) {
 
         SecurityContextHolder.getContext().setAuthentication(null);
 //        Cookie cookie = new Cookie("X-AUTH-TOKEN", null);

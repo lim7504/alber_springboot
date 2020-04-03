@@ -53,4 +53,8 @@ public class Wastebasket extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "wastebasket")
     private List<WastebasketComment> wastebasketCommentList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private Image image;
 }

@@ -4,15 +4,17 @@ import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentNImageDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistWastebasketDto;
+import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Set;
 
 import static com.querydsl.jpa.JPAExpressions.select;
-import static com.querydsl.jpa.JPAExpressions.selectFrom;
 import static org.themselves.alber.domain.QImage.image;
+import static org.themselves.alber.domain.QUser.user;
 import static org.themselves.alber.domain.QWastebasket.*;
 import static org.themselves.alber.domain.QWastebasketComment.wastebasketComment;
 import static org.themselves.alber.domain.QWastebasketImage.wastebasketImage;
@@ -59,14 +61,14 @@ public class WastebasketCommentRepositoryImpl implements WastebasketCommentRepos
 
 
     @Override
-    public List<WastebasketCommentNImageDto> findByUserComment(User user) {
+    public List<WastebasketCommentForMyRegistCommentDto> findByUserForMyRegistComment(User user) {
         JPAQueryFactory query = new JPAQueryFactory(em);
 
         QWastebasketImage wastebasketImageSub = new QWastebasketImage("wastebasketImageSub");
         QWastebasketImage wastebasketImageSub2 = new QWastebasketImage("wastebasketImageSub2");
 
-        List<WastebasketCommentNImageDto> result = query
-                .select(Projections.fields(WastebasketCommentNImageDto.class,
+        List<WastebasketCommentForMyRegistCommentDto> result = query
+                .select(Projections.fields(WastebasketCommentForMyRegistCommentDto.class,
                         wastebasketComment.contents
                         ,wastebasket.boxName
                         ,wastebasket.areaSi
@@ -86,4 +88,32 @@ public class WastebasketCommentRepositoryImpl implements WastebasketCommentRepos
 
         return result;
     }
+
+
+    @Override
+    public List<WastebasketCommentForMyRegistWastebasketDto> findByUserForMyRegistWastebasket(Set<Long> wastebasketList) {
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+//        QWastebasketImage wastebasketImageSub = new QWastebasketImage("wastebasketImageSub");
+//        QWastebasketImage wastebasketImageSub2 = new QWastebasketImage("wastebasketImageSub2");
+
+        List<WastebasketCommentForMyRegistWastebasketDto> result = query
+                .select(Projections.fields(WastebasketCommentForMyRegistWastebasketDto.class,
+                        wastebasketComment.id
+                        ,wastebasketComment.contents
+                        ,wastebasketComment.createdDate
+                        ,user.nickname
+                        ,image.url.as("image")))
+                .from(wastebasketComment)
+                .innerJoin(wastebasketComment.wastebasket, wastebasket)
+                .innerJoin(wastebasketComment.user, user)
+                .innerJoin(user.image, image)
+                .where(wastebasketComment.wastebasket.id.in(wastebasketList))
+                .orderBy(wastebasket.createdDate.desc()
+                        ,wastebasketComment.createdDate.desc())
+                .fetch();
+
+        return result;
+    }
+
 }

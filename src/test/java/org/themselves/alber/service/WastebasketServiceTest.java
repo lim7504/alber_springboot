@@ -1,13 +1,12 @@
-package org.themselves.alber.repository;
+package org.themselves.alber.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.domain.Pin;
+import org.themselves.alber.controller.wastebasket.dto.WastebasketForMyRegistWastebasketDto;
 import org.themselves.alber.domain.User;
-import org.themselves.alber.service.UserService;
 
 import java.util.List;
 
@@ -19,22 +18,18 @@ import static org.junit.jupiter.api.Assertions.*;
         ",classpath:/db.yml")
 @AutoConfigureMockMvc
 @Transactional
-class PinRepositoryTest {
+class WastebasketServiceTest {
 
     @Autowired
     UserService userService;
 
     @Autowired
-    PinRepository pinRepository;
-    
-    @Test
-    public void testGetRegistWastebasketByUser() {
-        User user = userService.getUserByEmail("aaa@aaa");
-        List<Pin> pinList = pinRepository.findByUser(user);
+    WastebasketService wastebasketService;
 
-        for (Pin pin : pinList) {
-            System.out.println("pin.getWastebasket().getBoxName() = " + pin.getWastebasket().getBoxName());
-        }
+    @Test
+    public void testGetWastebasketForMyRegist() {
+        User user = userService.getUserByEmail("aaa@aaa");
+        List<WastebasketForMyRegistWastebasketDto> wastebasketDtoList = wastebasketService.getPinByUserForMyRegist(user);
 
     }
 }

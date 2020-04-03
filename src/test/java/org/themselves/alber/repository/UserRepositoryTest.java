@@ -35,34 +35,15 @@ class UserRepositoryTest {
     @Test
     @Description("JPQL")
     public void testFindByEmail() {
-        User user = new User();
-        user.setEmail("eee@eee");
-        User findUser = userRepository.findByUserAndImageUrl(user.getEmail());
-        if(findUser.getImage() != null)
-            System.out.println(findUser.getImage().getUrl());
-        System.out.println(findUser.getEmail());
-        System.out.println(findUser.getNickname());
-        System.out.println(findUser.getGrade());
-
-    }
-
-    @Test
-    @Description("JPQL")
-    public void testFindByEmail2() {
-
-        Optional<User> user = userRepository.findByEmail("aaa@aaa");
+        Optional<User> user = userRepository.findByEmail("eee@eee");
         User findUser = userRepository.findByUserAndImageUrlAndPinList(user.get().getId());
         if(findUser.getImage() != null)
             System.out.println(findUser.getImage().getUrl());
         System.out.println(findUser.getEmail());
         System.out.println(findUser.getNickname());
         System.out.println(findUser.getGrade());
-        System.out.println(findUser.getUserPinList().size());
 
     }
-
-
-
 
 
     @Test
@@ -114,17 +95,5 @@ class UserRepositoryTest {
                 .fetchOne();
 
         assertThat(result.getNickname()).isEqualTo("둘리");
-    }
-
-    @Test
-    @Description("마이페이지-프로필이미지,이메일,닉네임,등급")
-    public void testMyPagePart1() {
-        User user = new User();
-        user.setEmail("eee@eee");
-        User findUser = userRepository.findByUserAndImageUrl(user.getEmail());
-        System.out.println(findUser.getImage().getUrl());
-
-        //assertEquals("둘리", byEmail.get().getNickname());
-
     }
 }

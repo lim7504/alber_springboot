@@ -31,8 +31,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "from User u " +
             "left join fetch u.image " +
             "left join fetch u.userPinList " +
-            "where u.id = :id")
-    User findByUserAndImageUrlAndPinList(@Param("id") Long id);
+            "where u.id = :user_id")
+    User findByUserAndImageUrlAndPinList(@Param("user_id") Long user_id);
 
     @Query("select u " +
             "from User u " +

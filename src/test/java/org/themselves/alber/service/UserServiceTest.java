@@ -63,7 +63,7 @@ class UserServiceTest {
         assertEquals("aaa@aaa", userDto.getEmail());
         assertEquals("둘리", userDto.getNickname());
         assertEquals("노오력시민", userDto.getGrade());
-        assertNull(userDto.getUrl());
+        assertNotNull(userDto.getUrl());
 
         user = userService.getUserByEmail("eee@eee");
         userDto = userService.getUserForMyPage(user);

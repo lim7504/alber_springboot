@@ -2,15 +2,17 @@ package org.themselves.alber.controller.wastebasketcomment.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
-public class WastebasketCommentNImageDto {
+public class WastebasketCommentForMyRegistCommentDto {
 
     private String contents;
     private String boxName;
     private String areaSi;
     private String image;
 
-    public WastebasketCommentNImageDto() {
+    public WastebasketCommentForMyRegistCommentDto() {
     }
 
 
