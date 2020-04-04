@@ -14,7 +14,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:3000"
                                 ,"http://localhost:63344"
                                 ,"http://localhost:8080")
-                .allowedMethods("*");
+                .allowedMethods("*")
+                .exposedHeaders("X-AUTH-TOKEN");
 //                .allowedMethods(
 //                        HttpMethod.GET.name(),
 //                        HttpMethod.HEAD.name(),
