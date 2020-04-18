@@ -1,6 +1,7 @@
 package org.themselves.alber.domain.common;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -20,10 +21,12 @@ public class BaseCreatedEntity {
 
     @CreatedDate
     @Column(updatable = false)
+    @ApiModelProperty("생성일")
     private LocalDateTime createdDate;
 
     @CreatedBy
     @Column(updatable = false)
+    @ApiModelProperty("수정자")
     private String createdBy;
 
 }
