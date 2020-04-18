@@ -157,7 +157,7 @@ public class WastebasketAdminController {
     /**
      * 쓰레기통 댓글 등록
      */
-    @PostMapping(value = "/{id}/comment")
+    @PostMapping(value = "/{id}/comment", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 등록")
     public ResponseEntity<ResponseContent> addWastebasketComment(@PathVariable Long id
             , Principal principal
@@ -176,7 +176,7 @@ public class WastebasketAdminController {
     /**
      * 쓰레기통 댓글 수정
      */
-    @PutMapping(value = "/comment/{id}")
+    @PutMapping(value = "/comment/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 수정")
     public ResponseEntity<ResponseContent> setWastebasketComment(@PathVariable Long id
             , Principal principal
@@ -193,7 +193,7 @@ public class WastebasketAdminController {
     /**
      * 쓰레기통 댓글 삭제
      */
-    @DeleteMapping(value = "/comment/{id}")
+    @DeleteMapping(value = "/comment/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 삭제")
     public ResponseEntity<ResponseContent> delWastebasketComment(@PathVariable Long id
             , Principal principal) {
