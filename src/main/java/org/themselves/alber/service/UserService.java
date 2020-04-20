@@ -44,11 +44,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-
     public Page<User> getUserAll(Pageable pageable){
         return userRepository.findAll(pageable);
     }
-
 
     public User getUserOne(Long id) {
         Optional<User> user = userRepository.findById(id);
@@ -67,6 +65,13 @@ public class UserService {
         return user.get();
     }
 
+    public User getUser(Long Id) {
+        Optional<User> user = userRepository.findById(Id);
+        if (!user.isPresent())
+            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+
+        return user.get();
+    }
 
     public boolean existUserNickname(String nickname) {
         Optional<User> user = userRepository.findByNickname(nickname);
@@ -101,13 +106,13 @@ public class UserService {
         userRepository.deleteById(id);
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+            throw new CustomException(StatusCode.DELETE_FAIL);
     }
 
 
     @Transactional
-    public void exitUser(String email) {
-        Optional<User> updateUser = userRepository.findByEmail(email);
+    public void exitUser(Long userId) {
+        Optional<User> updateUser = userRepository.findById(userId);
         if (!updateUser.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
@@ -121,24 +126,24 @@ public class UserService {
         return user.isPresent();
     }
 
-    public void updateNickname(String email, UserNicknameDto userNicknameDto) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public void updateNickname(Long userId, UserNicknameDto userNicknameDto) {
+        Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
         user.get().updateNickname(userNicknameDto.getNickname());
     }
 
-    public void updatePassword(String email, UserPasswordDto passwordDto) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public void updatePassword(Long userId, UserPasswordDto passwordDto) {
+        Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 
         user.get().updatePassword(passwordDto.getPassword());
     }
 
-    public void updateImage(String email, Long image_id) {
-        Optional<User> user = userRepository.findByEmail(email);
+    public void updateImage(Long userId, Long image_id) {
+        Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent())
             throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
 

@@ -2,22 +2,15 @@ package org.themselves.alber;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.multipart.support.StandardServletMultipartResolver;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @EnableJpaAuditing
 @SpringBootApplication
@@ -31,10 +24,16 @@ public class AlberApplication {
 				.run(args);
 	}
 
-	@Bean //로그인 했을시 등록
-	public AuditorAware<String> auditorProvider() {
-		return () -> Optional.of("로그인유저");
-	}
+//	@Bean //로그인 했을시 등록
+//	public AuditorAware<String> auditorProvider() {
+//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//		if (null == authentication || !authentication.isAuthenticated()) {
+//			return () -> Optional.of("로컬서버");
+//		}
+//		Object principal = authentication.getPrincipal();
+//
+////		return () -> Optional.of("로그인유저");
+//	}
 
 	@Bean
 	public ModelMapper modelMapper() {

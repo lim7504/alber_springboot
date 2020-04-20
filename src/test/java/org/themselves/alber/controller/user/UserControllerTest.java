@@ -127,7 +127,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("data.email").value("aaa@aaa"))
                 .andExpect(jsonPath("data.nickname").value("둘리"))
-                .andExpect(jsonPath("data.grade").value("노오력시민"))
+                .andExpect(jsonPath("data.grade").value("평범한시민"))
                 .andDo(print());
     }
 
@@ -222,7 +222,7 @@ class UserControllerTest {
 
     @Test
     public void testUpdatePassword() throws Exception{
-        Optional<User> optionalUser = userRepository.findByEmail("aaa@aaa2");
+        Optional<User> optionalUser = userRepository.findByEmail("aaa@aaa");
         String token = jwtTokenProvider.createToken(optionalUser.get().getEmail(), optionalUser.get().getType().name());
 
         UserPasswordDto userPasswordDto = new UserPasswordDto();

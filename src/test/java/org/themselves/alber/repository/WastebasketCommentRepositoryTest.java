@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -55,10 +56,9 @@ class WastebasketCommentRepositoryTest {
     EntityManager em;
 
     @Test
-    @Rollback(false)
     public void testAddComment() {
         User user = userService.getUserByEmail("aaa@aaa");
-        Optional<Wastebasket> wastebasket = wastebasketRepository.findById(105L);
+        Optional<Wastebasket> wastebasket = wastebasketRepository.findById(101L);
         WastebasketComment wc = new WastebasketComment();
         wc.setWastebasket(wastebasket.get());
         wc.setUser(user);
@@ -112,6 +112,7 @@ class WastebasketCommentRepositoryTest {
     }
 
     @Test
+    @Disabled
     public void testWastebasketComment3() throws Exception {
         User user = userService.getUserByEmail("aaa@aaa");
         List<WastebasketCommentForMyRegistCommentDto> commentList = wastebasketCommentRepository.findByUserForMyRegistComment(user);

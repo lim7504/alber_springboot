@@ -6,8 +6,10 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.themselves.alber.controller.user.dto.UserJoinDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.domain.Wastebasket;
+import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.repository.WastebasketRepository;
 import org.themselves.alber.service.UserService;
@@ -24,11 +26,11 @@ public class DataLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) {
 
 //        for(int i = 0; i< 100; i++){
-//            User user = new User();
+//            UserJoinDto user = new UserJoinDto();
 //            user.setNickname("TestUser" + i);
 //            user.setEmail("TestUser" + i + "@alber.org");
-//            user.setPassword("123123");
-//            userService.JoinUser(user);
+//            user.setPassword("1234abcd");
+//            userService.joinUser(user, UserType.USER);
 //
 //            Wastebasket wastebasket = new Wastebasket();
 //            wastebasket.setBoxName("box" + i);

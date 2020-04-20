@@ -23,6 +23,9 @@ public enum StatusCode {
     WASTEBASKETCOMMENT_NOT_SAME_USER("WB_004", "해당 댓글의 게시자가 아닙니다.", 400),
     WASTEBASKET_NOT_DELETE_EXIST_COMMENTS("WB_006", "댓글이 존재하여 쓰레기통을 제거 할 수 없습니다.", 400),
 
+    //Notifycation
+    NOTIFYCATION_NOT_FOUND("NC_001", "해당 공지사항 찾을 수 없습니다.", 400),
+
 
     //Session
     SUCCESS_LOGIN("SS_001", "로그인에 성공하였습니다.", 200),
@@ -37,6 +40,8 @@ public enum StatusCode {
     IMAGE_NOT_FOUND("CM_006", "해당 이미지를 찾을 수 없습니다.", 400),
     FILE_CREATE_ERROR("CM_007", "파일생성에러 입니다. 관리자에게 문의해 주세요", 500),
     INTERNAL_SERVER_ERROR("CM_999", "서버에러 입니다. 관리자에게 문의해 주세요", 500);
+
+
 
 
     private final String code;

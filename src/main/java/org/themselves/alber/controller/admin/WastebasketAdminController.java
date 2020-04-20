@@ -50,7 +50,7 @@ public class WastebasketAdminController {
     public ResponseEntity<ResponseContent> addWestebasket(@RequestBody @Valid WastebasketAddDto wastebasketAddDto, Principal principal) {
 
         Wastebasket wastebasket = modelMapper.map(wastebasketAddDto, Wastebasket.class);
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
 
         wasteBasketService.addWastebasket(wastebasket, user, wastebasketAddDto.getImageList());
 
@@ -127,7 +127,7 @@ public class WastebasketAdminController {
 
         Wastebasket wastebasket = modelMapper.map(wastebasketUpdateDto, Wastebasket.class);
         wastebasket.setId(id);
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
 
         wasteBasketService.setWastebasketOne(wastebasket, user, wastebasketUpdateDto.getImageList());
 
@@ -146,7 +146,7 @@ public class WastebasketAdminController {
     public ResponseEntity<ResponseContent> delWastebasket(@PathVariable Long id
             , Principal principal) {
 
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
         wasteBasketService.delWastebasket(id, user);
 
         return ResponseEntity
@@ -163,7 +163,7 @@ public class WastebasketAdminController {
             , Principal principal
             , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
         Wastebasket wastebasket = wasteBasketService.getWastebasketOne(id);
         wastebasketCommentService.addWastebasketComment(wastebasket, user, wastebasketCommentRequestDto.getContents());
 
@@ -182,7 +182,7 @@ public class WastebasketAdminController {
             , Principal principal
             , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
         wastebasketCommentService.setWastebasketComment(user, id, wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
@@ -198,7 +198,7 @@ public class WastebasketAdminController {
     public ResponseEntity<ResponseContent> delWastebasketComment(@PathVariable Long id
             , Principal principal) {
 
-        User user = userService.getUserByEmail(principal.getName());
+        User user = userService.getUser(Long.parseLong(principal.getName()));
         wastebasketCommentService.delWastebasketComment(user, id);
 
         return ResponseEntity

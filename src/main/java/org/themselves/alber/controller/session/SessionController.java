@@ -18,7 +18,6 @@ import org.themselves.alber.service.SessionService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@CrossOrigin("*")
 @RestController @RequiredArgsConstructor
 @RequestMapping("/session")
 @Api(description = "로그인/로그아웃")

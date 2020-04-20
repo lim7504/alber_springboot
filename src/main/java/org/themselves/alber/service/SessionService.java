@@ -43,7 +43,7 @@ public class SessionService implements UserDetailsService {
         }
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.get().getEmail())
+                .username(user.get().getId().toString())
                 .password(user.get().getPassword())
                 .roles(user.get().getType().name())
                 .build();

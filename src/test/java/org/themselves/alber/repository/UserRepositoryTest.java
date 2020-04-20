@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
         ,properties = "spring.config.location=" +
@@ -31,18 +33,16 @@ class UserRepositoryTest {
     @Autowired
     EntityManager em;
 
-
     @Test
     @Description("JPQL")
     public void testFindByEmail() {
-        Optional<User> user = userRepository.findByEmail("eee@eee");
+        Optional<User> user = userRepository.findByEmail("aaa@aaa");
         User findUser = userRepository.findByUserAndImageUrlAndPinList(user.get().getId());
-        if(findUser.getImage() != null)
+        if(findUser.getImage() != null) {
             System.out.println(findUser.getImage().getUrl());
-        System.out.println(findUser.getEmail());
-        System.out.println(findUser.getNickname());
-        System.out.println(findUser.getGrade());
-
+            assertNotNull(findUser.getImage().getUrl());
+        }
+        assertEquals("둘리", findUser.getNickname());
     }
 
 
@@ -50,22 +50,22 @@ class UserRepositoryTest {
     @Description("NativeQuery")
     public void testFindByNativeQuery() {
         User user = new User();
-        user.setEmail("eee@eee");
+        user.setEmail("aaa@aaa");
         Object object = userRepository.findByNativeQuery(user.getEmail());
         Object[] strArray = (Object[])object;
         System.out.println(strArray[0]);
-        //assertEquals("둘리", byEmail.get().getNickname());
+        assertEquals("둘리", strArray[0]);
     }
 
     @Test
     @Description("NativeQuery2")
     public void testFindByNativeQuery2() {
         User user = new User();
-        user.setEmail("eee@eee");
-        UserProjection userProjectionList = userRepository.findByNativeQuery2(user.getEmail());
-        System.out.println(userProjectionList.getNickname());
-        System.out.println(userProjectionList.getUrl());
-        //assertEquals("둘리", byEmail.get().getNickname());
+        user.setEmail("aaa@aaa");
+        UserProjection userProjection = userRepository.findByNativeQuery2(user.getEmail());
+        System.out.println(userProjection.getNickname());
+        System.out.println(userProjection.getUrl());
+        assertEquals("둘리", userProjection.getNickname());
     }
 
     @Test

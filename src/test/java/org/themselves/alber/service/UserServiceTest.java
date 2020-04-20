@@ -34,23 +34,23 @@ class UserServiceTest {
     @Test
     public void joinUser() {
         UserJoinDto userJoinDto = new UserJoinDto();
-        userJoinDto.setNickname("마빡이");
-        userJoinDto.setEmail("rrr@rrr");
-        userJoinDto.setPassword("1111aaaa");
+        userJoinDto.setNickname("둘리2");
+        userJoinDto.setEmail("aaa@aaa2");
+        userJoinDto.setPassword("1111abcd");
         userService.joinUser(userJoinDto, UserType.ADMIN);
 
-        assertEquals("마빡이", userService.getUserByEmail("rrr@rrr").getNickname());
+        assertEquals("둘리2", userService.getUserByEmail("aaa@aaa2").getNickname());
     }
 
     @Test
     public void testGetUserDetail() {
         User user = new User();
-        user.setEmail("eee@eee");
+        user.setEmail("aaa@aaa");
 
         UserResponseDto userDto = userService.getUser(user.getEmail());
 
-        assertEquals("eee@eee", userDto.getEmail());
-        assertEquals("누룽지", userDto.getNickname());
+        assertEquals("aaa@aaa", userDto.getEmail());
+        assertEquals("둘리", userDto.getNickname());
         assertNotNull(userDto.getUrl());
     }
 
@@ -62,16 +62,9 @@ class UserServiceTest {
 
         assertEquals("aaa@aaa", userDto.getEmail());
         assertEquals("둘리", userDto.getNickname());
-        assertEquals("노오력시민", userDto.getGrade());
-        assertNotNull(userDto.getUrl());
-
-        user = userService.getUserByEmail("eee@eee");
-        userDto = userService.getUserForMyPage(user);
-
-        assertEquals("eee@eee", userDto.getEmail());
-        assertEquals("누룽지", userDto.getNickname());
         assertEquals("평범한시민", userDto.getGrade());
         assertNotNull(userDto.getUrl());
+
     }
 
 
@@ -92,7 +85,7 @@ class UserServiceTest {
     public void testUpdateNickname() {
         UserNicknameDto userNicknameDto = new UserNicknameDto();
         userNicknameDto.setNickname("싱싱한쓰레기");
-        userService.updateNickname("aaa@aaa", userNicknameDto);
+        userService.updateNickname(1L, userNicknameDto);
 
         em.flush();
         em.clear();
@@ -101,34 +94,32 @@ class UserServiceTest {
 
     @Test
     public void testUpdatePassword() {
-        String email = "aaa@aaa";
         String updatePwd = "1111aaaa";
         UserPasswordDto passwordDto = new UserPasswordDto();
         passwordDto.setPassword(updatePwd);
 
-        userService.updatePassword(email, passwordDto);
+        userService.updatePassword(1L, passwordDto);
         Password password = new Password();
         em.flush();
         em.clear();
-        assertTrue(password.encodeMatches(updatePwd, userService.getUserByEmail(email).getPassword()));
+        assertTrue(password.encodeMatches(updatePwd, userService.getUser(1L).getPassword()));
     }
 
     @Test
     @Disabled //TODO 개발예정
     @Description("회원 탈퇴")
     public void testExitUser() {
-        userService.exitUser("aaa@aaa2");
+        userService.exitUser(1L);
         em.flush();
         em.clear();
-        assertThrows(CustomException.class,()->{userService.getUserByEmail("aaa@aaa2");});
+        assertThrows(CustomException.class,()->{userService.getUserByEmail("aaa@aaa");});
     }
 
     @Test
     public void testUpdateImage() {
-        String email = "eee@eee";
-        userService.updateImage(email, 11L);
 
-        assertEquals(11L, userService.getUserByEmail(email).getImage().getId());
+        userService.updateImage(1L, 11L);
+        assertEquals(11L, userService.getUser(1L).getImage().getId());
     }
 
 }
