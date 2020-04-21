@@ -14,11 +14,9 @@ import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
-import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.service.NotifycationService;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,7 +50,7 @@ public class NotifycationAdminController {
     }
 
     @GetMapping(value = "", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
-    @ApiOperation(value = "공지사항 리스트조회")
+    @ApiOperation(value = "공지사항 리스트조회", notes = "페이징 사용법 = ?page=0&size=5")
     public ResponseEntity<ResponseContent<Page<NotifycationListResponseDto>>> getNotifycationList(Pageable pageable) {
 
         Page<NotifycationListResponseDto> responseDto = notifycationService.getNotifycationList(pageable);

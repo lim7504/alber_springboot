@@ -55,7 +55,7 @@ public class UserAdminController {
     }
 
     @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
-    @ApiOperation(value = "회원리스트조회")
+    @ApiOperation(value = "회원리스트조회", notes = "페이징 사용법 = ?page=0&size=5")
     public ResponseEntity<ResponseContent<List<UserDtoByAdmin>>> getUserAll(Pageable pageable) {
 
         List<UserDtoByAdmin> userDtoList = new ArrayList<>();

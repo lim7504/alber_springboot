@@ -103,7 +103,7 @@ public class WastebasketAdminController {
      *
      */
     @GetMapping(produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
-    @ApiOperation(value = "쓰레기통리스트조회")
+    @ApiOperation(value = "쓰레기통리스트조회", notes = "페이징 사용법 = ?page=0&size=5")
     public ResponseEntity<ResponseContent<List<WastebasketDto>>> getWastebasketAll(Pageable pageable) {
 
         List<WastebasketDto> wastebasketDtoList = new ArrayList<>();
