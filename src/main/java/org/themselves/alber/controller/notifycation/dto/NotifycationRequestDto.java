@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class NotifycationDto {
+public class NotifycationRequestDto {
 
     @ApiModelProperty("공지사항 제목")
     private String title;
@@ -16,5 +16,5 @@ public class NotifycationDto {
     private String contents;
 
     @ApiModelProperty("공지사항 이미지 리스트")
-    private List<String> imageList = new ArrayList<>();
+    private List<String> imageIdList = new ArrayList<>();
 }

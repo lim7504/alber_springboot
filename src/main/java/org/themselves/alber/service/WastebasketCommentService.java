@@ -25,11 +25,14 @@ import java.util.Optional;
 public class WastebasketCommentService {
 
     private final WastebasketCommentRepository wastebasketCommentRepository;
-
+    private final UserRepository userRepository;
     private final PinRepository pinRepository;
 
     @Transactional
-    public void addWastebasketComment(Wastebasket wastebasket, User user, String contents) {
+    public void addWastebasketComment(Wastebasket wastebasket, Long userId, String contents) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
+
         WastebasketComment wastebasketComment = new WastebasketComment();
         wastebasketComment.setWastebasket(wastebasket);
         wastebasketComment.setUser(user);
@@ -39,30 +42,26 @@ public class WastebasketCommentService {
     }
 
     @Transactional
-    public void setWastebasketComment(User user, Long comment_id, String contents) {
-        Optional<WastebasketComment> wastebasketComment = wastebasketCommentRepository.findById(comment_id);
+    public void setWastebasketComment(Long userId, Long comment_id, String contents) {
+        WastebasketComment wastebasketComment = wastebasketCommentRepository.findById(comment_id)
+                .orElseThrow(()->new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_FOUND));
 
-        if(!wastebasketComment.isPresent())
-            throw new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_FOUND);
-
-        if(!wastebasketComment.get().getUser().getId().equals(user.getId()))
+        if(!wastebasketComment.getUser().getId().equals(userId))
             throw new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_SAME_USER);
 
-        wastebasketComment.get().setContents(contents);
+        wastebasketComment.setContents(contents);
     }
 
     @Transactional
-    public void delWastebasketComment(User user, Long comment_id) {
+    public void delWastebasketComment(Long userId, Long comment_id) {
 
-        Optional<WastebasketComment> wastebasketComment = wastebasketCommentRepository.findById(comment_id);
+        WastebasketComment wastebasketComment = wastebasketCommentRepository.findById(comment_id)
+                .orElseThrow(()-> new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_FOUND));
 
-        if(!wastebasketComment.isPresent())
-            throw new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_FOUND);
-
-        if(!wastebasketComment.get().getUser().getId().equals(user.getId()))
+        if(!wastebasketComment.getUser().getId().equals(userId))
             throw new CustomException(StatusCode.WASTEBASKETCOMMENT_NOT_SAME_USER);
 
-        wastebasketCommentRepository.delete(wastebasketComment.get());
+        wastebasketCommentRepository.delete(wastebasketComment);
     }
 
     public List<WastebasketComment> getWastebasketCommentList(Wastebasket wastebasket) {

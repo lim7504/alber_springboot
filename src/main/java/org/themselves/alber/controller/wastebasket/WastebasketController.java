@@ -48,9 +48,10 @@ public class WastebasketController {
     public ResponseEntity<ResponseContent> addWestebasket(@RequestBody @Valid WastebasketAddDto wastebasketAddDto, Principal principal) {
 
         Wastebasket wastebasket = modelMapper.map(wastebasketAddDto, Wastebasket.class);
-        User user = userService.getUser(Long.parseLong(principal.getName()));
 
-        wasteBasketService.addWastebasket(wastebasket, user, wastebasketAddDto.getImageList());
+        wasteBasketService.addWastebasket(wastebasket,
+                Long.parseLong(principal.getName()),
+                wastebasketAddDto.getImageIdList());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -64,14 +65,14 @@ public class WastebasketController {
      */
     @GetMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 상세")
-    public ResponseEntity<ResponseContent<WastebasketResponseDto>> getWastebaseketOne(@PathVariable Long id) {
+    public ResponseEntity<ResponseContent<WastebasketResponseDto>> getWastebaseketOne(@PathVariable("id") Long wastebasketId) {
 
-        Wastebasket wastebasket = wasteBasketService.getWastebasketOne(id);
+        Wastebasket wastebasket = wasteBasketService.getWastebasketOne(wastebasketId);
         List<String> imageUrlList = imageService.getImageUrlList(wastebasket);
 
         WastebasketResponseDto wastebasketDto = modelMapper.map(wastebasket, WastebasketResponseDto.class);
         for (String imageUrl:imageUrlList) {
-            wastebasketDto.getImageList().add(imageUrl);
+            wastebasketDto.getUrlList().add(imageUrl);
         }
 
         for (WastebasketComment wastebasketComment : wastebasket.getWastebasketCommentList()) {
@@ -108,15 +109,14 @@ public class WastebasketController {
      */
     @PutMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 수정")
-    public ResponseEntity<ResponseContent> setWestebasketOne(@PathVariable Long id,
+    public ResponseEntity<ResponseContent> setWestebasketOne(@PathVariable("id") Long wastebasketId,
                                                              @RequestBody @Valid WastebasketUpdateDto wastebasketUpdateDto
                                                             , Principal principal) {
 
         Wastebasket wastebasket = modelMapper.map(wastebasketUpdateDto, Wastebasket.class);
-        wastebasket.setId(id);
-        User user = userService.getUser(Long.parseLong(principal.getName()));
+        wastebasket.setId(wastebasketId);
 
-        wasteBasketService.setWastebasketOne(wastebasket, user, wastebasketUpdateDto.getImageList());
+        wasteBasketService.setWastebasketOne(wastebasket, wastebasketUpdateDto.getImageIdList());
 
         return ResponseEntity
                 .ok()
@@ -130,11 +130,10 @@ public class WastebasketController {
      */
     @DeleteMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 삭제")
-    public ResponseEntity<ResponseContent> delWastebasket(@PathVariable Long id
+    public ResponseEntity<ResponseContent> delWastebasket(@PathVariable("id") Long wastebasketId
             , Principal principal) {
 
-        User user = userService.getUser(Long.parseLong(principal.getName()));
-        wasteBasketService.delWastebasket(id, user);
+        wasteBasketService.delWastebasket(wastebasketId, Long.parseLong(principal.getName()));
 
         return ResponseEntity
                 .ok()
@@ -146,13 +145,12 @@ public class WastebasketController {
      */
     @PostMapping(value = "/{id}/comment", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 등록")
-    public ResponseEntity<ResponseContent> addWastebasketComment(@PathVariable Long id
+    public ResponseEntity<ResponseContent> addWastebasketComment(@PathVariable("id") Long wastebasketId
             , Principal principal
             , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
-        User user = userService.getUser(Long.parseLong(principal.getName()));
-        Wastebasket wastebasket = wasteBasketService.getWastebasketOne(id);
-        wastebasketCommentService.addWastebasketComment(wastebasket, user, wastebasketCommentRequestDto.getContents());
+        Wastebasket wastebasket = wasteBasketService.getWastebasketOne(wastebasketId);
+        wastebasketCommentService.addWastebasketComment(wastebasket, Long.parseLong(principal.getName()), wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -165,12 +163,13 @@ public class WastebasketController {
      */
     @PutMapping(value = "/comment/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 수정")
-    public ResponseEntity<ResponseContent> setWastebasketComment(@PathVariable Long id
+    public ResponseEntity<ResponseContent> setWastebasketComment(@PathVariable("id") Long wcId
             , Principal principal
             , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
-        User user = userService.getUser(Long.parseLong(principal.getName()));
-        wastebasketCommentService.setWastebasketComment(user, id, wastebasketCommentRequestDto.getContents());
+        wastebasketCommentService.setWastebasketComment(Long.parseLong(principal.getName()),
+                wcId,
+                wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
                 .ok()
@@ -182,11 +181,11 @@ public class WastebasketController {
      */
     @DeleteMapping(value = "/comment/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 댓글 삭제")
-    public ResponseEntity<ResponseContent> delWastebasketComment(@PathVariable Long id
+    public ResponseEntity<ResponseContent> delWastebasketComment(@PathVariable("id") Long wcId
             , Principal principal) {
 
-        User user = userService.getUser(Long.parseLong(principal.getName()));
-        wastebasketCommentService.delWastebasketComment(user, id);
+        wastebasketCommentService.delWastebasketComment(Long.parseLong(principal.getName())
+                , wcId);
 
         return ResponseEntity
                 .ok()
@@ -196,8 +195,8 @@ public class WastebasketController {
     @GetMapping(value = "/myregist", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "내가 등록한 쓰레기통")
     public ResponseEntity<ResponseContent<List<WastebasketForMyRegistWastebasketDto>>> delWastebasketComment(Principal principal) {
-        User user = userService.getUser(Long.parseLong(principal.getName()));
 
+        User user = userService.getUser(Long.parseLong(principal.getName()));
         List<WastebasketForMyRegistWastebasketDto> wastebasketDtoList = wasteBasketService.getPinByUserForMyRegist(user);
 
         return ResponseEntity

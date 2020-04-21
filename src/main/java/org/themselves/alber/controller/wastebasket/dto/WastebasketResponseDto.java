@@ -34,7 +34,7 @@ public class WastebasketResponseDto {
     private String longitude;
 
     @ApiModelProperty("쓰레기통 이미지 Url 리스트")
-    private List<String> imageList = new ArrayList<>();
+    private List<String> urlList = new ArrayList<>();
 
     @ApiModelProperty("쓰레기통 댓글 리스트")
     private List<WastebasketCommentResponseDto> commentDtoList = new ArrayList<>();

@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.notifycation.dto.NotifycationDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
+import org.themselves.alber.domain.NotifycationImage;
 import org.themselves.alber.repository.mapper.ImageMapper;
 import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.repository.NotifycationRepository;
@@ -23,44 +26,43 @@ public class NotifycationService {
     private final ImageMapper imageMapper;
 
     @Transactional
-    public void addNotifycation(NotifycationDto notiDto) {
+    public void addNotifycation(NotifycationRequestDto notiDto) {
         Notifycation noti = Notifycation.createNotifycation(
                   notiDto.getTitle()
                 , notiDto.getContents()
-                , imageMapper.mapping(notiDto.getImageList()));
+                , imageMapper.mapping(notiDto.getImageIdList()));
 
         notifycationRepository.save(noti);
     }
 
-    public Notifycation getNotifycation(long id) {
-        Optional<Notifycation> optionalNoti = notifycationRepository.findById(id);
-        if(!optionalNoti.isPresent())
-            throw new CustomException(StatusCode.NOTIFYCATION_NOT_FOUND);
+    public NotifycationResponseDto getNotifycation(long id) {
+        Notifycation noti = notifycationRepository.findByNotifycationWithImage(id)
+                .orElseThrow(()-> new CustomException(StatusCode.NOTIFYCATION_NOT_FOUND));
 
-        return optionalNoti.get();
+        return new NotifycationResponseDto(noti);
     }
 
-    public Page<Notifycation> getNotifycationList(Pageable pageable) {
-        return notifycationRepository.findAll(pageable);
+    public Page<NotifycationListResponseDto> getNotifycationList(Pageable pageable) {
+        return notifycationRepository.findAll(pageable)
+                .map(NotifycationListResponseDto::new);
     }
 
     @Transactional
-    public void updateNotifycation(Long notiId, NotifycationDto notiDto) {
-        Optional<Notifycation> optionalNoti = notifycationRepository.findById(notiId);
-        if(!optionalNoti.isPresent())
-            throw new CustomException(StatusCode.NOTIFYCATION_NOT_FOUND);
+    public void updateNotifycation(Long notiId, NotifycationRequestDto notiDto) {
+        Notifycation noti = notifycationRepository.findById(notiId)
+                .orElseThrow(()->new CustomException(StatusCode.NOTIFYCATION_NOT_FOUND));
 
-        optionalNoti.get().updateNotifycation(
+        noti.updateNotifycation(
                 notiDto.getTitle()
                 ,notiDto.getContents()
-                ,imageMapper.mapping(notiDto.getImageList()));
+                ,imageMapper.mapping(notiDto.getImageIdList()));
     }
 
     @Transactional
     public void deleteNotifycation(long notiId) {
         notifycationRepository.deleteById(notiId);
-        Optional<Notifycation> noti = notifycationRepository.findById(notiId);
-        if (noti.isPresent())
+        Optional<Notifycation> optionalNoti = notifycationRepository.findById(notiId);
+        if(optionalNoti.isPresent())
             throw new CustomException(StatusCode.DELETE_FAIL);
     }
 }

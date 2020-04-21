@@ -47,7 +47,11 @@ public class Notifycation extends BaseEntity {
     public void updateNotifycation(String notiTitle, String notiContents, List<Image> imageList) {
         Iterator<NotifycationImage> iter = notifycationImageList.iterator();
         while (iter.hasNext()){
-            iter.next();
+            NotifycationImage iterNoti = iter.next();
+            if(imageList.contains(iterNoti.getImage())) {
+                imageList.remove(iterNoti.getImage());
+                continue;
+            }
             iter.remove();
         }
 

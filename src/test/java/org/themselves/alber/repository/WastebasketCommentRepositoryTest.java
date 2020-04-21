@@ -1,17 +1,13 @@
 package org.themselves.alber.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.controller.wastebasket.dto.WastebasketForMyRegistWastebasketDto;
 import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.*;
 import org.themselves.alber.repository.projection.MyPageProjection;
@@ -22,12 +18,10 @@ import java.util.*;
 
 import static com.querydsl.jpa.JPAExpressions.select;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.themselves.alber.domain.QImage.image;
 import static org.themselves.alber.domain.QPin.pin;
 import static org.themselves.alber.domain.QUser.user;
 import static org.themselves.alber.domain.QWastebasket.wastebasket;
 import static org.themselves.alber.domain.QWastebasketComment.wastebasketComment;
-import static org.themselves.alber.domain.QWastebasketImage.wastebasketImage;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK
         ,properties = "spring.config.location=" +
@@ -102,7 +96,7 @@ class WastebasketCommentRepositoryTest {
             commentNImageDto.setBoxName(comment.getBox_Name().toString());
             commentNImageDto.setAreaSi(comment.getArea_Si().toString());
             if (comment.getUrl() != null)
-                commentNImageDto.setImage(comment.getUrl().toString());
+                commentNImageDto.setUrl(comment.getUrl().toString());
             commentNImageDtoList.add(commentNImageDto);
         }
 

@@ -22,5 +22,5 @@ public class WastebasketAddDto {
     private String longitude;
 
     @ApiModelProperty("쓰레기통 이미지 ID 최대 3개")
-    private List<String> imageList = new ArrayList<>();
+    private List<String> imageIdList = new ArrayList<>();
 }

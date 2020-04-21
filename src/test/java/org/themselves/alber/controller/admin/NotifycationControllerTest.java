@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.JwtTokenProvider;
-import org.themselves.alber.controller.notifycation.dto.NotifycationDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.domain.User;
 import org.themselves.alber.repository.NotifycationRepository;
 import org.themselves.alber.repository.UserRepository;
@@ -55,11 +55,11 @@ class NotifycationControllerTest {
 //            SecurityContextHolder.getContext().setAuthentication(auth);
 //        }
 
-        NotifycationDto notiDto = new NotifycationDto();
+        NotifycationRequestDto notiDto = new NotifycationRequestDto();
         notiDto.setTitle("공지 Test");
         notiDto.setContents("공지 내용 Test");
-        notiDto.getImageList().add("10");
-        notiDto.getImageList().add("11");
+        notiDto.getImageIdList().add("10");
+        notiDto.getImageIdList().add("11");
 
         mockMvc.perform(post("/admin/notifycation")
                 .contentType(String.valueOf(MediaType.JSON_UTF_8))
@@ -80,8 +80,8 @@ class NotifycationControllerTest {
                 .accept(String.valueOf(MediaType.JSON_UTF_8))
                 .header("X-AUTH-TOKEN", token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("data.notiTitle").value("타이틀"))
-                .andExpect(jsonPath("data.notiContents").value("내용"))
+                .andExpect(jsonPath("data.title").value("타이틀"))
+                .andExpect(jsonPath("data.contents").value("내용"))
                 .andDo(print());
 
     }

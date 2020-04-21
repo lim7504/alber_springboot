@@ -3,8 +3,6 @@ package org.themselves.alber.controller.wastebasketcomment.dto;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
-
 @Data
 public class WastebasketCommentForMyRegistCommentDto {
 
@@ -18,7 +16,7 @@ public class WastebasketCommentForMyRegistCommentDto {
     private String areaSi;
 
     @ApiModelProperty("유저 이미지 url")
-    private String image;
+    private String url;
 
     public WastebasketCommentForMyRegistCommentDto() {
     }
@@ -30,7 +28,7 @@ public class WastebasketCommentForMyRegistCommentDto {
                 "contents='" + contents + '\'' +
                 ", boxName='" + boxName + '\'' +
                 ", areaSi='" + areaSi + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + url + '\'' +
                 '}';
     }
 }

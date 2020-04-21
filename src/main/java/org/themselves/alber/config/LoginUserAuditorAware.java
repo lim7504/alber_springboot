@@ -18,12 +18,16 @@ public class LoginUserAuditorAware  implements AuditorAware<String> {
 
     @Override
     public Optional<String> getCurrentAuditor() {
+        String auditor;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (null == authentication || !authentication.isAuthenticated()) {
-            return Optional.of("로컬서버");
-        }
 
-        User user = (User) authentication.getPrincipal();
-        return Optional.of(user.getUsername());
+        if (null == authentication || !authentication.isAuthenticated())
+            auditor = "local test";
+        else if(authentication.getPrincipal() instanceof User)
+            auditor = ((User) authentication.getPrincipal()).getUsername();
+        else
+            auditor = "join";
+
+        return Optional.of(auditor);
     }
 }

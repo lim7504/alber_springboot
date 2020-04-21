@@ -31,7 +31,7 @@ public class UserController {
 
     @PostMapping(consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8")
     @ApiOperation(value = "회원가입")
-    public ResponseEntity<ResponseContent> joinUser(@RequestBody @Valid UserJoinDto userJoinDto) {
+    public ResponseEntity<ResponseContent> joinUser(@RequestBody UserJoinDto userJoinDto) {
 
         userService.joinUser(userJoinDto, UserType.USER);
 
@@ -55,8 +55,7 @@ public class UserController {
     @GetMapping(value = "/mypage", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "마이페이지")
     public ResponseEntity<ResponseContent<UserMyPageDto>> getUserForMyPage(Principal principal) {
-        User user = userService.getUser(Long.parseLong(principal.getName()));
-        UserMyPageDto userDto = userService.getUserForMyPage(user);
+        UserMyPageDto userDto = userService.getUserForMyPage(Long.parseLong(principal.getName()));
 
         return ResponseEntity
                 .ok()

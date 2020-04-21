@@ -44,9 +44,9 @@ public class UserAdminController {
 
     @GetMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원상세조회")
-    public ResponseEntity<ResponseContent<UserDtoByAdmin>> getUserOne(@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseContent<UserDtoByAdmin>> getUserOne(@PathVariable("id") Long userId) {
 
-        User user = userService.getUserOne(id);
+        User user = userService.getUser(userId);
         UserDtoByAdmin userDto = modelMapper.map(user, UserDtoByAdmin.class);
 
         return ResponseEntity
@@ -81,9 +81,9 @@ public class UserAdminController {
 
     @DeleteMapping(value = "/{id}", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "회원삭제")
-    public ResponseEntity deleteUser(@PathVariable("id") Long id) {
+    public ResponseEntity deleteUser(@PathVariable("id") Long userId) {
 
-        userService.deleteUser(id);
+        userService.deleteUser(userId);
 
         return ResponseEntity
                 .ok()

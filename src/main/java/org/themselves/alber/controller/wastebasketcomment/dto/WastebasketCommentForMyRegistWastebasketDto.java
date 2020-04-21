@@ -21,5 +21,5 @@ public class WastebasketCommentForMyRegistWastebasketDto {
     private String nickname;
 
     @ApiModelProperty("유저 이미지 url")
-    private String image;
+    private String url;
 }

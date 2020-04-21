@@ -11,12 +11,16 @@ import org.themselves.alber.config.response.StatusCode;
 import org.themselves.alber.controller.user.dto.*;
 import org.themselves.alber.controller.wastebasketcomment.dto.WastebasketCommentForMyRegistCommentDto;
 import org.themselves.alber.domain.Image;
+import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.domain.User;
+import org.themselves.alber.domain.common.UserStatus;
 import org.themselves.alber.domain.common.UserType;
 import org.themselves.alber.repository.ImageRepository;
+import org.themselves.alber.repository.NotifycationRepository;
 import org.themselves.alber.repository.UserRepository;
 import org.themselves.alber.repository.WastebasketCommentRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +33,7 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final ImageRepository imageRepository;
     private final WastebasketCommentRepository wastebasketCommentRepository;
+    private final NotifycationRepository notifycationRepository;
 
     @Transactional
     public void joinUser(UserJoinDto userJoinDto, UserType userType) {
@@ -42,27 +47,17 @@ public class UserService {
         user.joinCheckNSetting(userType);
 
         userRepository.save(user);
+
     }
 
     public Page<User> getUserAll(Pageable pageable){
         return userRepository.findAll(pageable);
     }
 
-    public User getUserOne(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (!user.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
-
-        return user.get();
-    }
-
 
     public User getUserByEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (!user.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
-
-        return user.get();
+        return userRepository.findByEmail(email)
+                .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
     }
 
     public User getUser(Long Id) {
@@ -104,20 +99,18 @@ public class UserService {
     @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent())
-            throw new CustomException(StatusCode.DELETE_FAIL);
+        userRepository.findById(id)
+                .orElseThrow(()->new CustomException(StatusCode.DELETE_FAIL));
     }
 
 
     @Transactional
     public void exitUser(Long userId) {
-        Optional<User> updateUser = userRepository.findById(userId);
-        if (!updateUser.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+        User updateUser = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
-//        updateUser.get().setStatus(UserStatus.INACTIVE);
-//        updateUser.get().setExitedDate(LocalDateTime.now());
+        updateUser.setStatus(UserStatus.INACTIVE);
+        updateUser.setExitedDate(LocalDateTime.now());
     }
 
 
@@ -127,11 +120,10 @@ public class UserService {
     }
 
     public void updateNickname(Long userId, UserNicknameDto userNicknameDto) {
-        Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
-        user.get().updateNickname(userNicknameDto.getNickname());
+        user.updateNickname(userNicknameDto.getNickname());
     }
 
     public void updatePassword(Long userId, UserPasswordDto passwordDto) {
@@ -143,21 +135,21 @@ public class UserService {
     }
 
     public void updateImage(Long userId, Long image_id) {
-        Optional<User> user = userRepository.findById(userId);
-        if (!user.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
-        Optional<Image> image = imageRepository.findById(image_id);
+        Image image = imageRepository.findById(image_id)
+                .orElseThrow(()-> new CustomException(StatusCode.IMAGE_NOT_FOUND));
 
-        user.get().updateImage(image.get());
+        user.updateImage(image);
     }
 
-    public UserMyPageDto getUserForMyPage(User user) {
-        User findUser = userRepository.findByUserAndImageUrlAndPinList(user.getId());
-        UserMyPageDto userDto = modelMapper.map(findUser, UserMyPageDto.class);
-        userDto.setPinCnt(findUser.getUserPinList().size());
-        if(findUser.getImage() != null)
-            userDto.setUrl(findUser.getImage().getUrl());
+    public UserMyPageDto getUserForMyPage(Long userId) {
+        User user = userRepository.findByUserAndImageUrlAndPinList(userId);
+        UserMyPageDto userDto = modelMapper.map(user, UserMyPageDto.class);
+        userDto.setPinCnt(user.getUserPinList().size());
+        if(user.getImage() != null)
+            userDto.setUrl(user.getImage().getUrl());
 
         List<WastebasketCommentForMyRegistCommentDto> commentList = wastebasketCommentRepository.findByUserForMyRegistComment(user);
         for (WastebasketCommentForMyRegistCommentDto commentDto : commentList) {

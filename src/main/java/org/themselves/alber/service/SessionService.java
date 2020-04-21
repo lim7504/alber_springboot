@@ -24,28 +24,25 @@ public class SessionService implements UserDetailsService {
     private final UserRepository userRepository;
 
     public User login(User user) {
-        Optional<User> findUser = userRepository.findByEmail(user.getEmail());
-        if (!findUser.isPresent())
-            throw new CustomException(StatusCode.ACCOUNT_NOT_FOUND);
+        User findUser = userRepository.findByEmail(user.getEmail())
+                .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
         Password pwd = new Password();
-        if(!pwd.encodeMatches(user.getPassword(), findUser.get().getPassword()))
+        if(!pwd.encodeMatches(user.getPassword(), findUser.getPassword()))
             throw new CustomException(StatusCode.PASSWORD_ALONG);
 
-        return findUser.get();
+        return findUser;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByEmail(email);
-        if (!user.isPresent()) {
-            throw new UsernameNotFoundException(email);
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()->new UsernameNotFoundException(email));
 
         return org.springframework.security.core.userdetails.User.builder()
-                .username(user.get().getId().toString())
-                .password(user.get().getPassword())
-                .roles(user.get().getType().name())
+                .username(user.getId().toString())
+                .password(user.getPassword())
+                .roles(user.getType().name())
                 .build();
     }
 }

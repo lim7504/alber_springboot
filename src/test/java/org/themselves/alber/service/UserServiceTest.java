@@ -58,7 +58,7 @@ class UserServiceTest {
     @Test
     public void testGetUserForMyPage() {
         User user = userService.getUserByEmail("aaa@aaa");
-        UserMyPageDto userDto = userService.getUserForMyPage(user);
+        UserMyPageDto userDto = userService.getUserForMyPage(101L);
 
         assertEquals("aaa@aaa", userDto.getEmail());
         assertEquals("둘리", userDto.getNickname());
@@ -85,7 +85,7 @@ class UserServiceTest {
     public void testUpdateNickname() {
         UserNicknameDto userNicknameDto = new UserNicknameDto();
         userNicknameDto.setNickname("싱싱한쓰레기");
-        userService.updateNickname(1L, userNicknameDto);
+        userService.updateNickname(101L, userNicknameDto);
 
         em.flush();
         em.clear();

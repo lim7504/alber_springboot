@@ -37,7 +37,7 @@ class WastebasketCommentServiceTest {
     public void testAddComment() {
         User user = userService.getUserByEmail("aaa@aaa");
         Wastebasket wastebasket = wastebasketService.getWastebasketOne(101L);
-        wastebasketCommentService.addWastebasketComment(wastebasket,user,"pppp");
+        wastebasketCommentService.addWastebasketComment(wastebasket,101L,"pppp");
     }
 
 

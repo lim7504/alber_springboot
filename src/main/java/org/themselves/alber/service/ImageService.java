@@ -25,10 +25,10 @@ public class ImageService {
 
         List<String> urlList = new ArrayList<>();
         for(WastebasketImage wastebasketImage : wastebasket.getWastebasketImageList()){
-            Optional<Image> image = imageRepository.findById(wastebasketImage.getImage().getId());
-            if (!image.isPresent())
-                throw new CustomException(StatusCode.INTERNAL_SERVER_ERROR);
-            urlList.add(image.get().getUrl());
+            Image image = imageRepository.findById(wastebasketImage.getImage().getId())
+                    .orElseThrow(()->new CustomException(StatusCode.INTERNAL_SERVER_ERROR));
+
+            urlList.add(image.getUrl());
         }
         return urlList;
     }
