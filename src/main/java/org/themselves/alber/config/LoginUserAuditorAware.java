@@ -12,21 +12,21 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class LoginUserAuditorAware  implements AuditorAware<String> {
+public class LoginUserAuditorAware  implements AuditorAware<Long> {
 
     private final UserRepository userRepository;
 
     @Override
-    public Optional<String> getCurrentAuditor() {
-        String auditor;
+    public Optional<Long> getCurrentAuditor() {
+        Long auditor;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (null == authentication || !authentication.isAuthenticated())
-            auditor = "local test";
+            auditor = -1L;
         else if(authentication.getPrincipal() instanceof User)
-            auditor = ((User) authentication.getPrincipal()).getUsername();
+            auditor = Long.parseLong(((User) authentication.getPrincipal()).getUsername());
         else
-            auditor = "join";
+            auditor = 0L;
 
         return Optional.of(auditor);
     }

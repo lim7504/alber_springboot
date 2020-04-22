@@ -31,11 +31,11 @@ public class BaseEntity {
     @CreatedBy
     @Column(updatable = false)
     @ApiModelProperty("생성자")
-    private String createdBy;
+    private Long createdBy;
 
     @LastModifiedBy
     @ApiModelProperty("수정자")
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 
 
 }

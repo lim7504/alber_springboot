@@ -27,6 +27,6 @@ public class BaseCreatedEntity {
     @CreatedBy
     @Column(updatable = false)
     @ApiModelProperty("수정자")
-    private String createdBy;
+    private Long createdBy;
 
 }

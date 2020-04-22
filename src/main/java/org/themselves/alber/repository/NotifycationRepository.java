@@ -10,7 +10,7 @@ import org.themselves.alber.domain.User;
 
 import java.util.Optional;
 
-public interface NotifycationRepository extends JpaRepository<Notifycation, Long> {
+public interface NotifycationRepository extends JpaRepository<Notifycation, Long>, NotifycationRepositoryCustom {
     Optional<Notifycation> findByNotiTitle(String notiTitle);
 
     @Query("select n " +
@@ -22,8 +22,8 @@ public interface NotifycationRepository extends JpaRepository<Notifycation, Long
 
     @Query( value = "select n " +
             "from Notifycation n " +
-            "order by n.id desc "
-            , countQuery = "select count(n) from Notifycation n ")
-    Page<Notifycation> findAll(Pageable pageable);
+            "order by n.id desc ")
+//            , countQuery = "select count(n) from Notifycation n ")
+    Page<Notifycation> findAll2(Pageable pageable);
 
 }

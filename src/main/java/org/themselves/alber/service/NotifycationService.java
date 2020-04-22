@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
@@ -42,9 +43,10 @@ public class NotifycationService {
         return new NotifycationResponseDto(noti);
     }
 
-    public Page<NotifycationListResponseDto> getNotifycationList(Pageable pageable) {
-        return notifycationRepository.findAll(pageable)
-                .map(NotifycationListResponseDto::new);
+    public Page<NotifycationListResponseDto> getNotifycationList(
+            NotifycationListRequestDto notiDto,
+            Pageable pageable) {
+        return notifycationRepository.findAllWithCondition(notiDto, pageable);
     }
 
     @Transactional

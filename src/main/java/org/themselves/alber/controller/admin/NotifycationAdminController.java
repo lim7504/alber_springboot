@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
@@ -51,9 +52,11 @@ public class NotifycationAdminController {
 
     @GetMapping(value = "", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "공지사항 리스트조회", notes = "페이징 사용법 = ?page=0&size=5")
-    public ResponseEntity<ResponseContent<Page<NotifycationListResponseDto>>> getNotifycationList(Pageable pageable) {
+    public ResponseEntity<ResponseContent<Page<NotifycationListResponseDto>>> getNotifycationList(
+            @RequestBody NotifycationListRequestDto notiDto,
+            Pageable pageable) {
 
-        Page<NotifycationListResponseDto> responseDto = notifycationService.getNotifycationList(pageable);
+        Page<NotifycationListResponseDto> responseDto = notifycationService.getNotifycationList(notiDto, pageable);
 
         return ResponseEntity
                 .ok()
