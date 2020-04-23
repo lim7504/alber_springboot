@@ -26,6 +26,8 @@ public enum StatusCode {
     //Notifycation
     NOTIFYCATION_NOT_FOUND("NC_001", "해당 공지사항 찾을 수 없습니다.", 400),
 
+    //FAQ
+    FAQ_NOT_FOUND("FAQ_001", "해당 질문을 찾을 수 없습니다.", 400),
 
     //Session
     SUCCESS_LOGIN("SS_001", "로그인에 성공하였습니다.", 200),

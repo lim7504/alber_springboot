@@ -26,7 +26,7 @@ public class BaseEntity {
 
     @LastModifiedDate
     @ApiModelProperty("수정일")
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime updatedDate;
 
     @CreatedBy
     @Column(updatable = false)
@@ -35,7 +35,7 @@ public class BaseEntity {
 
     @LastModifiedBy
     @ApiModelProperty("수정자")
-    private Long lastModifiedBy;
+    private Long updatedBy;
 
 
 }

@@ -20,9 +20,7 @@ public interface NotifycationRepository extends JpaRepository<Notifycation, Long
             "where n.id = :id")
     Optional<Notifycation> findByNotifycationWithImage(@Param("id") Long id);
 
-    @Query( value = "select n " +
-            "from Notifycation n " +
-            "order by n.id desc ")
+    @Query( value = "select n from Notifycation n order by n.id desc ")
 //            , countQuery = "select count(n) from Notifycation n ")
     Page<Notifycation> findAll(Pageable pageable);
 
