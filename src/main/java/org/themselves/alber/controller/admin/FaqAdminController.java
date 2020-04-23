@@ -24,7 +24,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/faq")
-@Api(description = "자주하는질문")
+@Api(description = "자주하는질문 어드민")
 public class FaqAdminController {
 
     private final FaqService faqService;

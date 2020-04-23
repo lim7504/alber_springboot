@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
-@Api(description = "회원_어드민")
+@Api(description = "회원 어드민")
 public class UserAdminController {
 
     private final UserService userService;

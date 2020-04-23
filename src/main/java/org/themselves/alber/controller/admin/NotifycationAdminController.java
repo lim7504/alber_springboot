@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/notifycation")
-@Api(description = "공지사항")
+@Api(description = "공지사항 어드민")
 public class NotifycationAdminController {
 
     private final NotifycationService notifycationService;

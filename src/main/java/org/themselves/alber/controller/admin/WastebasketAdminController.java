@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/wastebasket")
-@Api(description = "쓰레기통_어드민")
+@Api(description = "쓰레기통 어드민")
 public class WastebasketAdminController {
 
     private final ModelMapper modelMapper;
