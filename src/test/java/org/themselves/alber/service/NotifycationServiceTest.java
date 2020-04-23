@@ -4,18 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.themselves.alber.config.JwtTokenProvider;
-import org.themselves.alber.controller.common.dto.ImageIdSortDto;
+import org.themselves.alber.controller.common.dto.ImageIdWithSortNoDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
-import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.repository.NotifycationRepository;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,11 +48,11 @@ class NotifycationServiceTest {
         NotifycationRequestDto notiDto = new NotifycationRequestDto();
         notiDto.setTitle("테스트");
         notiDto.setContents("테스트");
-        ImageIdSortDto imageIdSortDto = new ImageIdSortDto();
+        ImageIdWithSortNoDto imageIdSortDto = new ImageIdWithSortNoDto();
         imageIdSortDto.setImageId(10L);
         imageIdSortDto.setSortNo(2);
 
-        ImageIdSortDto imageIdSortDto2 = new ImageIdSortDto();
+        ImageIdWithSortNoDto imageIdSortDto2 = new ImageIdWithSortNoDto();
         imageIdSortDto2.setImageId(11L);
         imageIdSortDto2.setSortNo(1);
 

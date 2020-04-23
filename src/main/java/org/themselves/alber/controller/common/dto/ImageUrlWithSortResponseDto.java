@@ -1,13 +1,13 @@
 package org.themselves.alber.controller.common.dto;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.themselves.alber.domain.Image;
 
 @Data
-public class ImageSortDto {
+public class ImageUrlWithSortResponseDto {
 
-    Image image;
+    String url;
 
     Integer sortNo;
+
 }

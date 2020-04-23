@@ -7,14 +7,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestDto;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListRequestDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListResponseDto;
 import org.themselves.alber.domain.Notifycation;
-import org.themselves.alber.domain.NotifycationImage;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,9 +39,9 @@ class NotifycationRepositoryTest {
     @Test
     public void testGetNotifycationList() {
         Pageable pageable = PageRequest.of(0, 3);
-        NotifycationListRequestDto notiDto = new NotifycationListRequestDto();
+        NotifycationAdminListRequestDto notiDto = new NotifycationAdminListRequestDto();
         notiDto.setContents("내용");
-        Page<NotifycationListResponseDto> allWithCondition = notifycationRepository.findAllWithCondition(notiDto, pageable);
+        Page<NotifycationAdminListResponseDto> allWithCondition = notifycationRepository.findAllWithCondition(notiDto, pageable);
         allWithCondition.forEach(System.out::print);
     }
 }

@@ -3,15 +3,13 @@ package org.themselves.alber.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.themselves.alber.controller.common.dto.ImageSortDto;
+import org.themselves.alber.controller.common.dto.ImageWithSortNoDto;
 import org.themselves.alber.domain.common.BaseEntity;
 
 import javax.persistence.*;
 import java.util.*;
-import java.util.stream.Stream;
 
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.reverseOrder;
 
 @Entity
 @TableGenerator(name="SEQ_NOTI", table="SEQUENCES", pkColumnValue="NOTI_SEQ", allocationSize=1)
@@ -31,7 +29,7 @@ public class Notifycation extends BaseEntity {
     @OneToMany(mappedBy = "notifycation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NotifycationImage> notifycationImageList = new ArrayList<>();
 
-    public static Notifycation createNotifycation(String notiTitle, String notiContents, List<ImageSortDto> imageList) {
+    public static Notifycation createNotifycation(String notiTitle, String notiContents, List<ImageWithSortNoDto> imageList) {
         Notifycation noti = new Notifycation();
         noti.notiTitle = notiTitle;
         noti.notiContents = notiContents;
@@ -39,13 +37,13 @@ public class Notifycation extends BaseEntity {
         return noti;
     }
 
-    private void addNotifycationImage(ImageSortDto imageSortDto){
+    private void addNotifycationImage(ImageWithSortNoDto imageSortDto){
         NotifycationImage notifycationImage = new NotifycationImage(this, imageSortDto);
         this.notifycationImageList.add(notifycationImage);
     }
 
 
-    public void updateNotifycation(String notiTitle, String notiContents, List<ImageSortDto> imageSortDtoList) {
+    public void updateNotifycation(String notiTitle, String notiContents, List<ImageWithSortNoDto> imageSortDtoList) {
         Iterator<NotifycationImage> iter = notifycationImageList.iterator();
         while (iter.hasNext()){
             NotifycationImage iterNoti = iter.next();

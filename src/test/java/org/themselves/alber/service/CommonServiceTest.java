@@ -8,10 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.themselves.alber.controller.common.dto.ImageIdSortDto;
-import org.themselves.alber.controller.common.dto.ImageSortDto;
-import org.themselves.alber.domain.Image;
-import org.themselves.alber.repository.ImageRepository;
+import org.themselves.alber.controller.common.dto.ImageIdWithSortNoDto;
+import org.themselves.alber.controller.common.dto.ImageWithSortNoDto;
 import org.themselves.alber.repository.mapper.ImageMapper;
 
 import java.io.IOException;
@@ -59,29 +57,29 @@ class CommonServiceTest {
     @Test
     public void testImageContructor() {
 
-        ImageIdSortDto imageIdSortDto = new ImageIdSortDto();
+        ImageIdWithSortNoDto imageIdSortDto = new ImageIdWithSortNoDto();
         imageIdSortDto.setImageId(10L);
         imageIdSortDto.setSortNo(2);
 
-        ImageSortDto image = imageMapper.mapping(imageIdSortDto);
+        ImageWithSortNoDto image = imageMapper.mapping(imageIdSortDto);
         assertNotNull(image);
     }
 
     @Test
     public void testImageConstructorWithImageIdList() {
-        List<ImageIdSortDto> imageIdList = new ArrayList<>();
-        ImageIdSortDto imageIdSortDto = new ImageIdSortDto();
+        List<ImageIdWithSortNoDto> imageIdList = new ArrayList<>();
+        ImageIdWithSortNoDto imageIdSortDto = new ImageIdWithSortNoDto();
         imageIdSortDto.setImageId(10L);
         imageIdSortDto.setSortNo(2);
 
-        ImageIdSortDto imageIdSortDto2 = new ImageIdSortDto();
+        ImageIdWithSortNoDto imageIdSortDto2 = new ImageIdWithSortNoDto();
         imageIdSortDto2.setImageId(11L);
         imageIdSortDto2.setSortNo(1);
 
         imageIdList.add(imageIdSortDto);
         imageIdList.add(imageIdSortDto2);
 
-        List<ImageSortDto> imageList = imageMapper.mapping(imageIdList);
+        List<ImageWithSortNoDto> imageList = imageMapper.mapping(imageIdList);
         assertEquals(2, imageList.size());
     }
 }

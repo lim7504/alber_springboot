@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import org.themselves.alber.controller.common.dto.ImageIdSortDto;
-import org.themselves.alber.controller.common.dto.ImageSortDto;
+import org.themselves.alber.controller.common.dto.ImageWithSortNoDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.domain.NotifycationImage;
@@ -38,7 +36,7 @@ class NotifycationImageRepositoryTest {
 
         Optional<Notifycation> optionalNoti = notifycationRepository.findById(1L);
         Optional<Image> optionalImage = imageRepository.findById(12L);
-        ImageSortDto imageSortDto = new ImageSortDto();
+        ImageWithSortNoDto imageSortDto = new ImageWithSortNoDto();
         imageSortDto.setImage(optionalImage.get());
         imageSortDto.setSortNo(2);
 

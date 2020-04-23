@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class ImageIdSortDto {
+public class ImageIdWithSortNoDto {
 
     @ApiModelProperty("이미지 Id")
     Long imageId;

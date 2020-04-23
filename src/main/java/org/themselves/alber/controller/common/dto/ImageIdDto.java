@@ -7,7 +7,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class ImageDto {
+public class ImageIdDto {
 
     @ApiModelProperty("이미지 Id")
     long imageId;

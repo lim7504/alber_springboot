@@ -24,6 +24,6 @@ public interface NotifycationRepository extends JpaRepository<Notifycation, Long
             "from Notifycation n " +
             "order by n.id desc ")
 //            , countQuery = "select count(n) from Notifycation n ")
-    Page<Notifycation> findAll2(Pageable pageable);
+    Page<Notifycation> findAll(Pageable pageable);
 
 }

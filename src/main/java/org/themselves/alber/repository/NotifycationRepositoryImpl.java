@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestDto;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListRequestDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListResponseDto;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -25,13 +25,13 @@ public class NotifycationRepositoryImpl implements NotifycationRepositoryCustom 
     private final EntityManager em;
 
     @Override
-    public Page<NotifycationListResponseDto> findAllWithCondition(
-            NotifycationListRequestDto notiDto,
+    public Page<NotifycationAdminListResponseDto> findAllWithCondition(
+            NotifycationAdminListRequestDto notiDto,
             Pageable pageable) {
 
         JPAQueryFactory query = new JPAQueryFactory(em);
 
-        QueryResults<NotifycationListResponseDto> results = query.select(Projections.fields(NotifycationListResponseDto.class,
+        QueryResults<NotifycationAdminListResponseDto> results = query.select(Projections.fields(NotifycationAdminListResponseDto.class,
                 notifycation.id,
                 notifycation.notiTitle.as("title"),
                 notifycation.notiContents.as("contents"),
@@ -49,7 +49,7 @@ public class NotifycationRepositoryImpl implements NotifycationRepositoryCustom 
                 .limit(pageable.getPageSize())
                 .fetchResults();
 
-        List<NotifycationListResponseDto> content = results.getResults();
+        List<NotifycationAdminListResponseDto> content = results.getResults();
         Long total = results.getTotal();
 
         return new PageImpl<>(content, pageable, total);

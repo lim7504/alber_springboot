@@ -7,7 +7,7 @@ import org.themselves.alber.domain.Notifycation;
 import java.time.LocalDateTime;
 
 @Data
-public class NotifycationListRequestDto {
+public class NotifycationAdminListRequestDto {
 
     @ApiModelProperty("공지사항 번호")
     private Long id;

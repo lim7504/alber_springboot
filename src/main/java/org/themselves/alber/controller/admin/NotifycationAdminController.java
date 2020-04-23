@@ -3,7 +3,6 @@ package org.themselves.alber.controller.admin;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -11,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.themselves.alber.config.response.ResponseContent;
 import org.themselves.alber.config.response.StatusCode;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestDto;
-import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListRequestDto;
+import org.themselves.alber.controller.notifycation.dto.NotifycationAdminListResponseDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
 import org.themselves.alber.service.NotifycationService;
@@ -26,7 +25,6 @@ import javax.validation.Valid;
 public class NotifycationAdminController {
 
     private final NotifycationService notifycationService;
-    private final ModelMapper modelMapper;
 
     @PostMapping(consumes="application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "공지사항 등록")
@@ -52,11 +50,11 @@ public class NotifycationAdminController {
 
     @GetMapping(value = "", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "공지사항 리스트조회", notes = "페이징 사용법 = ?page=0&size=5")
-    public ResponseEntity<ResponseContent<Page<NotifycationListResponseDto>>> getNotifycationList(
-            @RequestBody NotifycationListRequestDto notiDto,
+    public ResponseEntity<ResponseContent<Page<NotifycationAdminListResponseDto>>> getNotifycationList(
+            @RequestBody NotifycationAdminListRequestDto notiDto,
             Pageable pageable) {
 
-        Page<NotifycationListResponseDto> responseDto = notifycationService.getNotifycationList(notiDto, pageable);
+        Page<NotifycationAdminListResponseDto> responseDto = notifycationService.getNotifycationList(notiDto, pageable);
 
         return ResponseEntity
                 .ok()
