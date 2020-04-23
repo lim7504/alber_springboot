@@ -3,6 +3,7 @@ package org.themselves.alber.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.themselves.alber.controller.common.dto.ImageSortDto;
 import org.themselves.alber.domain.common.BaseEntity;
 
 import javax.persistence.*;
@@ -30,7 +31,7 @@ public class Notifycation extends BaseEntity {
     @OneToMany(mappedBy = "notifycation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NotifycationImage> notifycationImageList = new ArrayList<>();
 
-    public static Notifycation createNotifycation(String notiTitle, String notiContents, List<Image> imageList) {
+    public static Notifycation createNotifycation(String notiTitle, String notiContents, List<ImageSortDto> imageList) {
         Notifycation noti = new Notifycation();
         noti.notiTitle = notiTitle;
         noti.notiContents = notiContents;
@@ -38,26 +39,27 @@ public class Notifycation extends BaseEntity {
         return noti;
     }
 
-    private void addNotifycationImage(Image image){
-        NotifycationImage notifycationImage = new NotifycationImage(this, image);
+    private void addNotifycationImage(ImageSortDto imageSortDto){
+        NotifycationImage notifycationImage = new NotifycationImage(this, imageSortDto);
         this.notifycationImageList.add(notifycationImage);
     }
 
 
-    public void updateNotifycation(String notiTitle, String notiContents, List<Image> imageList) {
+    public void updateNotifycation(String notiTitle, String notiContents, List<ImageSortDto> imageSortDtoList) {
         Iterator<NotifycationImage> iter = notifycationImageList.iterator();
         while (iter.hasNext()){
             NotifycationImage iterNoti = iter.next();
-            if(imageList.contains(iterNoti.getImage())) {
-                imageList.remove(iterNoti.getImage());
-                continue;
-            }
+            imageSortDtoList.forEach(imageSortDto -> {
+                if(imageSortDto.getImage().equals(iterNoti.getImage()))
+                    imageSortDtoList.remove(imageSortDto);
+            });
+
             iter.remove();
         }
 
         this.notiTitle = notiTitle;
         this.notiContents = notiContents;
-        imageList.forEach(this::addNotifycationImage);
+        imageSortDtoList.forEach(this::addNotifycationImage);
     }
 
 

@@ -11,7 +11,6 @@ import org.themselves.alber.controller.notifycation.dto.NotifycationListRequestD
 import org.themselves.alber.controller.notifycation.dto.NotifycationListResponseDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationRequestDto;
 import org.themselves.alber.controller.notifycation.dto.NotifycationResponseDto;
-import org.themselves.alber.domain.NotifycationImage;
 import org.themselves.alber.repository.mapper.ImageMapper;
 import org.themselves.alber.domain.Notifycation;
 import org.themselves.alber.repository.NotifycationRepository;
@@ -31,7 +30,7 @@ public class NotifycationService {
         Notifycation noti = Notifycation.createNotifycation(
                   notiDto.getTitle()
                 , notiDto.getContents()
-                , imageMapper.mapping(notiDto.getImageIdList()));
+                , imageMapper.mapping(notiDto.getImageList()));
 
         notifycationRepository.save(noti);
     }
@@ -57,7 +56,7 @@ public class NotifycationService {
         noti.updateNotifycation(
                 notiDto.getTitle()
                 ,notiDto.getContents()
-                ,imageMapper.mapping(notiDto.getImageIdList()));
+                ,imageMapper.mapping(notiDto.getImageList()));
     }
 
     @Transactional

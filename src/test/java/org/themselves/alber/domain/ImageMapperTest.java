@@ -20,7 +20,9 @@ class ImageMapperTest {
 
     @Test
     public void testImageMapperTest() {
-        Image image = imageMapper.mapping("10");
-        System.out.println("image = " + image.getUrl());
+
+
+//        Image image = imageMapper.mapping(10L);
+//        System.out.println("image = " + image.getUrl());
     }
 }

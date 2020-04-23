@@ -8,6 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.themselves.alber.controller.common.dto.ImageIdSortDto;
+import org.themselves.alber.controller.common.dto.ImageSortDto;
 import org.themselves.alber.domain.Image;
 import org.themselves.alber.repository.ImageRepository;
 import org.themselves.alber.repository.mapper.ImageMapper;
@@ -56,17 +58,30 @@ class CommonServiceTest {
 
     @Test
     public void testImageContructor() {
-        Image image = imageMapper.mapping("10");
+
+        ImageIdSortDto imageIdSortDto = new ImageIdSortDto();
+        imageIdSortDto.setImageId(10L);
+        imageIdSortDto.setSortNo(2);
+
+        ImageSortDto image = imageMapper.mapping(imageIdSortDto);
         assertNotNull(image);
     }
 
     @Test
     public void testImageConstructorWithImageIdList() {
-        List<String> imageIdList = new ArrayList<>();
-        imageIdList.add("10");
-        imageIdList.add("11");
+        List<ImageIdSortDto> imageIdList = new ArrayList<>();
+        ImageIdSortDto imageIdSortDto = new ImageIdSortDto();
+        imageIdSortDto.setImageId(10L);
+        imageIdSortDto.setSortNo(2);
 
-        List<Image> imageList = imageMapper.mapping(imageIdList);
+        ImageIdSortDto imageIdSortDto2 = new ImageIdSortDto();
+        imageIdSortDto2.setImageId(11L);
+        imageIdSortDto2.setSortNo(1);
+
+        imageIdList.add(imageIdSortDto);
+        imageIdList.add(imageIdSortDto2);
+
+        List<ImageSortDto> imageList = imageMapper.mapping(imageIdList);
         assertEquals(2, imageList.size());
     }
 }
