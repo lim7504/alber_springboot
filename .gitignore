@@ -31,8 +31,8 @@ build/
 .vscode/
 
 ### DB Connect Info###
-#/src/main/resources/db.yml
-#/src/main/resources/application.yml
+/src/main/resources/db.yml
+/src/main/resources/application.yml
 
 ### Upload Resource###
 image/
