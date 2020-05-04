@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.themselves.alber.config.response.CustomException;
 import org.themselves.alber.config.response.StatusCode;
+import org.themselves.alber.controller.user.dto.UserJoinDto;
 import org.themselves.alber.controller.user.dto.UserUpdateDto;
 import org.themselves.alber.domain.common.BaseEntity;
 import org.themselves.alber.domain.common.UserSocialType;
@@ -108,5 +109,14 @@ public class User extends BaseEntity {
 
     public void updateImage(Image image) {
         this.image = image;
+    }
+
+    public static User createUser(UserJoinDto userJoinDto, UserType userType){
+        User user = new User();
+        user.setNickname(userJoinDto.getNickname());
+        user.setEmail(userJoinDto.getEmail());
+        user.setPassword(userJoinDto.getPassword());
+        user.joinCheckNSetting(userType);
+        return user;
     }
 }

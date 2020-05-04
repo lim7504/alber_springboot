@@ -17,7 +17,14 @@ public class Pin extends BaseCreatedEntity {
     private User user;
 
     @Id
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "box_id")
     private Wastebasket wastebasket;
+
+    public static Pin createPin(User user, Wastebasket wastebasket) {
+        Pin pin = new Pin();
+        pin.setUser(user);
+        pin.setWastebasket(wastebasket);
+        return pin;
+    }
 }

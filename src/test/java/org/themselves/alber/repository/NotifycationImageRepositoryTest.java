@@ -41,7 +41,7 @@ class NotifycationImageRepositoryTest {
         imageSortDto.setSortNo(2);
 
 
-        NotifycationImage notifycationImage = new NotifycationImage(optionalNoti.get(), imageSortDto);
+        NotifycationImage notifycationImage = NotifycationImage.createNotifycationImage(optionalNoti.get(), imageSortDto);
         notifycationImageRepository.save(notifycationImage);
 
         assertNotNull(notifycationImageRepository.findAll());

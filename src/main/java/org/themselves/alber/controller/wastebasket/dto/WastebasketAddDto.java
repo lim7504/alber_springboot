@@ -2,6 +2,7 @@ package org.themselves.alber.controller.wastebasket.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.themselves.alber.controller.common.dto.ImageIdWithSortNoDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,5 +23,5 @@ public class WastebasketAddDto {
     private String longitude;
 
     @ApiModelProperty("쓰레기통 이미지 ID 최대 3개")
-    private List<String> imageIdList = new ArrayList<>();
+    private List<ImageIdWithSortNoDto> imageList = new ArrayList<>();
 }

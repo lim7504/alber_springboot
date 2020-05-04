@@ -38,20 +38,15 @@ public class Notifycation extends BaseEntity {
     }
 
     private void addNotifycationImage(ImageWithSortNoDto imageSortDto){
-        NotifycationImage notifycationImage = new NotifycationImage(this, imageSortDto);
+        NotifycationImage notifycationImage = NotifycationImage.createNotifycationImage(this, imageSortDto);
         this.notifycationImageList.add(notifycationImage);
     }
 
-
     public void updateNotifycation(String notiTitle, String notiContents, List<ImageWithSortNoDto> imageSortDtoList) {
-        Iterator<NotifycationImage> iter = notifycationImageList.iterator();
-        while (iter.hasNext()){
-            NotifycationImage iterNoti = iter.next();
-            imageSortDtoList.forEach(imageSortDto -> {
-                if(imageSortDto.getImage().equals(iterNoti.getImage()))
-                    imageSortDtoList.remove(imageSortDto);
-            });
 
+        Iterator<NotifycationImage> iter = this.notifycationImageList.iterator();
+        while (iter.hasNext()){
+            iter.next();
             iter.remove();
         }
 

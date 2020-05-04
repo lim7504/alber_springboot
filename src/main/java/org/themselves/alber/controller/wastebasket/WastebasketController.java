@@ -47,11 +47,8 @@ public class WastebasketController {
     @ApiOperation(value = "쓰레기통 등록")
     public ResponseEntity<ResponseContent> addWestebasket(@RequestBody @Valid WastebasketAddDto wastebasketAddDto, Principal principal) {
 
-        Wastebasket wastebasket = modelMapper.map(wastebasketAddDto, Wastebasket.class);
-
-        wasteBasketService.addWastebasket(wastebasket,
-                Long.parseLong(principal.getName()),
-                wastebasketAddDto.getImageIdList());
+        wasteBasketService.addWastebasket(wastebasketAddDto,
+                Long.parseLong(principal.getName()));
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -110,13 +107,9 @@ public class WastebasketController {
     @PutMapping(value = "/{id}", consumes = "application/json; charset=UTF-8", produces = "application/json; charset=UTF-8", headers = "X-AUTH-TOKEN")
     @ApiOperation(value = "쓰레기통 수정")
     public ResponseEntity<ResponseContent> setWestebasketOne(@PathVariable("id") Long wastebasketId,
-                                                             @RequestBody @Valid WastebasketUpdateDto wastebasketUpdateDto
-                                                            , Principal principal) {
+                                                             @RequestBody @Valid WastebasketUpdateDto wastebasketUpdateDto) {
 
-        Wastebasket wastebasket = modelMapper.map(wastebasketUpdateDto, Wastebasket.class);
-        wastebasket.setId(wastebasketId);
-
-        wasteBasketService.setWastebasketOne(wastebasket, wastebasketUpdateDto.getImageIdList());
+        wasteBasketService.setWastebasketOne(wastebasketId, wastebasketUpdateDto);
 
         return ResponseEntity
                 .ok()
@@ -149,8 +142,9 @@ public class WastebasketController {
             , Principal principal
             , @RequestBody @Valid WastebasketCommentRequestDto wastebasketCommentRequestDto) {
 
-        Wastebasket wastebasket = wasteBasketService.getWastebasketOne(wastebasketId);
-        wastebasketCommentService.addWastebasketComment(wastebasket, Long.parseLong(principal.getName()), wastebasketCommentRequestDto.getContents());
+        wastebasketCommentService.addWastebasketComment(wastebasketId,
+                Long.parseLong(principal.getName()),
+                wastebasketCommentRequestDto.getContents());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

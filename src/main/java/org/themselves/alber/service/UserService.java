@@ -37,18 +37,17 @@ public class UserService {
 
     @Transactional
     public void joinUser(UserJoinDto userJoinDto, UserType userType) {
+
         if (userRepository.findByEmail(userJoinDto.getEmail()).isPresent())
             throw new CustomException(StatusCode.EMAIL_DUPLICATION);
 
         if (userRepository.findByNickname(userJoinDto.getNickname()).isPresent())
             throw new CustomException(StatusCode.NICKNAME_DUPLICATION);
 
-        User user = modelMapper.map(userJoinDto, User.class);
-        user.joinCheckNSetting(userType);
-
+        User user = User.createUser(userJoinDto, userType);
         userRepository.save(user);
-
     }
+
 
     public Page<User> getUserAll(Pageable pageable){
         return userRepository.findAll(pageable);
@@ -60,12 +59,14 @@ public class UserService {
                 .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
     }
 
+
     public User getUser(Long Id) {
         User user = userRepository.findById(Id)
                 .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
         return user;
     }
+
 
     public boolean existUserNickname(String nickname) {
         Optional<User> user = userRepository.findByNickname(nickname);
@@ -118,6 +119,7 @@ public class UserService {
         return user.isPresent();
     }
 
+
     public void updateNickname(Long userId, UserNicknameDto userNicknameDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
@@ -125,12 +127,14 @@ public class UserService {
         user.updateNickname(userNicknameDto.getNickname());
     }
 
+
     public void updatePassword(Long userId, UserPasswordDto passwordDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new CustomException(StatusCode.ACCOUNT_NOT_FOUND));
 
         user.updatePassword(passwordDto.getPassword());
     }
+
 
     public void updateImage(Long userId, Long image_id) {
         User user = userRepository.findById(userId)
@@ -141,6 +145,7 @@ public class UserService {
 
         user.updateImage(image);
     }
+
 
     public UserMyPageDto getUserForMyPage(Long userId) {
         User user = userRepository.findByUserAndImageUrlAndPinList(userId);

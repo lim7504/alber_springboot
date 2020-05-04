@@ -24,13 +24,12 @@ public class NotifycationImage extends BaseCreatedEntity {
 
     private Integer sortNo;
 
-    public NotifycationImage() {
-    }
-
-    public NotifycationImage(Notifycation notifycation, ImageWithSortNoDto imageSortDto) {
-        this.notifycation = notifycation;
-        this.image = imageSortDto.getImage();
-        this.sortNo = imageSortDto.getSortNo();
+    public static NotifycationImage createNotifycationImage(Notifycation notifycation, ImageWithSortNoDto imageSortDto){
+        NotifycationImage notifycationImage = new NotifycationImage();
+        notifycationImage.setNotifycation(notifycation);
+        notifycationImage.setImage(imageSortDto.getImage());
+        notifycationImage.setSortNo(imageSortDto.getSortNo());
+        return notifycationImage;
     }
 
 }

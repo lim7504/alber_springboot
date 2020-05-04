@@ -26,4 +26,16 @@ public class WastebasketComment extends BaseCreatedEntity {
     private User user;
 
     private String contents;
+
+    public static WastebasketComment createWastebasketComment(User user, Wastebasket wastebasket, String contents){
+        WastebasketComment wastebasketComment = new WastebasketComment();
+        wastebasketComment.setUser(user);
+        wastebasketComment.setWastebasket(wastebasket);
+        wastebasketComment.setContents(contents);
+        return wastebasketComment;
+    }
+
+    public void updateContents(String contents){
+        this.contents = contents;
+    }
 }

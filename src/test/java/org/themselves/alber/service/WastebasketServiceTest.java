@@ -32,4 +32,14 @@ class WastebasketServiceTest {
         List<WastebasketForMyRegistWastebasketDto> wastebasketDtoList = wastebasketService.getPinByUserForMyRegist(user);
 
     }
+
+//    @Test
+//    public void testAddWastebasketWithImage(){
+//
+//
+//
+//        wastebasketService.addWastebasket();
+//
+//
+//    }
 }
