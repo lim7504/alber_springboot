@@ -9,10 +9,20 @@
 길거리에는 아무곳에나 버려진 일회용 음료수컵이 즐비하다.
 하여 설치되어있는 쓰레기통을 쉽게 찾을 수 있도록 쓰레기통 쉽게 찾기 서비스를 제공한다.
 
-해당 리포지토리는 알버 서비스의 백엔드 개발 소스이다.
+(해당 리포지토리는 알버 서비스의 백엔드 개발 소스이다.)
 
-개발자 : 임재성
 
-사용기술 : Spring boot, Spring Data Jpa, String Security, Json Web Token, Rest API, Swagger(Api 문서)
 
-인프라 : EC2(Ubuntu Server), RDS(MySQL), S3(Image 저장), Jenkins(배포)
+스터디 소개 : themselves (http://54.180.89.203/) 
+
+기획 : 김소정(지도 기획), 여지혜(마이 페이지 기획)
+
+디자인 : 최지윤(지도 디자인), 배영현(마이페이지 디자인)
+
+개발 : 김성진(IOS, Admin 개발), 임재성(BackEnd 개발), 박주영(Android 개발)
+
+
+
+해당 리포지토리 사용기술 : Spring boot, Spring Data Jpa, String Security, Json Web Token, Rest API, Swagger(Api 문서)
+
+EC2(Ubuntu Server), RDS(MySQL), S3(Image 저장), Jenkins(배포)
