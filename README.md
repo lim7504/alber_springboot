@@ -23,7 +23,8 @@
 
 
 
-해당 리포지토리 사용기술 : Spring boot, Spring Data Jpa, String Security, Json Web Token, Rest API, Swagger(Api 문서)
+해당 리포지토리 사용기술 : Spring boot, Spring Data Jpa, String Security, Json Web Token, Rest API, Swagger(Api 문서 url :
+http://ec2-15-164-93-24.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui.html#/)
 
 EC2(Ubuntu Server), RDS(MySQL), S3(Image 저장), Jenkins(배포)
 
