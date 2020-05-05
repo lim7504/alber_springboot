@@ -26,3 +26,6 @@
 해당 리포지토리 사용기술 : Spring boot, Spring Data Jpa, String Security, Json Web Token, Rest API, Swagger(Api 문서)
 
 EC2(Ubuntu Server), RDS(MySQL), S3(Image 저장), Jenkins(배포)
+
+ERD : AQueryTool 
+(ERD url : https://aquerytool.com:443/aquerymain/index/?rurl=bd0725f5-552d-4c25-88bc-30b5baaad248 password : 4c7d27) 
